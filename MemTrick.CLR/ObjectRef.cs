@@ -6,33 +6,69 @@ namespace MemTrick.CLR
     /// <summary>
     /// Value type object to retrieve reference type object.
     /// </summary>
-    public unsafe struct ObjectRef<T> : IDisposable
+    public unsafe struct ObjectRef : IDisposable
     {
-        internal ObjectHeader* ObjectHeaderPtr;
+        private MethodTable** ptr;
+
+        internal int SyncBlock
+        {
+            get
+            {
+                return *(int*)(ptr - 1);
+            }
+            set
+            {
+                *(int*)(ptr - 1) = value;
+            }
+        }
+
+        internal MethodTable* MethodTablePtr
+        {
+            get
+            {
+                return *ptr;
+            }
+            set
+            {
+                *ptr = value;
+            }
+        }
+
+        internal void* DataStartPoint
+        {
+            get
+            {
+                return ptr + 1;
+            }
+        }
 
         internal ObjectRef(ObjectHeader* objectHeader)
         {
-            ObjectHeaderPtr = objectHeader;
+            ptr = (MethodTable**)objectHeader + 1;
         }
 
         public unsafe Object GetObject()
         {
-            MethodTable** bodyPointer = ObjectHeader.GetMethodTablePointer(ObjectHeaderPtr);
+            return GetObject<Object>();
+        }
+        public unsafe T GetObject<T>()
+        {
+            MethodTable** p = ptr;
             PublicTypedReference typedReference = new PublicTypedReference
             {
-                ObjectBodyPointerRef = &bodyPointer,
-                MethodTablePointer = MethodTable.GetMethodTable<Object>(),
+                ObjectBodyPointerRef = &p,
+                MethodTablePointer = MethodTable.GetMethodTable<T>(),
             };
 
-            return __refvalue(*(TypedReference*)&typedReference, Object);
+            return __refvalue(*(TypedReference*)&typedReference, T);
         }
 
         public void Dispose()
         {
-            if (ObjectHeaderPtr != null)
+            if (ptr != null)
             {
-                RawMemoryAllocator.Free(ObjectHeaderPtr);
-                ObjectHeaderPtr = null;
+                RawMemoryAllocator.Free(ptr - 1);
+                ptr = null;
             }
         }
     }

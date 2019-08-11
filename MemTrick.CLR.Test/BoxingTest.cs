@@ -58,7 +58,7 @@ namespace MemTrick.CLR.Test
         {
             int val = 0x12345678;
 
-            using (ObjectRef<int> objRef = Boxing.Box(val))
+            using (ObjectRef objRef = Boxing.Box(val))
             {
                 Object boxed = objRef.GetObject();
                 Assert.AreEqual(

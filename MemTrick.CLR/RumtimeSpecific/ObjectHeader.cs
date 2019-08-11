@@ -2,6 +2,9 @@
 
 namespace MemTrick.CLR.RumtimeSpecific
 {
+    /// <summary>
+    /// Pointer to sync block.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal unsafe struct ObjectHeader
     {
