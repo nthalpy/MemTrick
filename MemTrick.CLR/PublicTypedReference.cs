@@ -1,4 +1,5 @@
 ﻿using MemTrick.CLR.RumtimeSpecific;
+using System;
 using System.Runtime.InteropServices;
 
 namespace MemTrick.CLR
@@ -6,7 +7,12 @@ namespace MemTrick.CLR
     [StructLayout(LayoutKind.Sequential)]
     internal unsafe struct PublicTypedReference
     {
-        public MethodTable*** ObjectBodyPointerRef;
-        public MethodTable* MethodTablePointer;
+        public void* Value;
+        public void* Type;
+
+        public ObjectRef ToObjectRef()
+        {
+            return new ObjectRef((ObjectHeader*)((Byte*)Value - sizeof(void*)));
+        }
     }
 }

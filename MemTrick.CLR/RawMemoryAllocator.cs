@@ -62,12 +62,30 @@ namespace MemTrick.CLR
             }
         }
 
+        public static void MemCpy(void* dst, void* src, int size)
+        {
+            int* d = (int*)dst;
+            int* s = (int*)src;
+
+            for (int idx = 0; idx < size; idx += 4)
+                *d++ = *s++;
+        }
+                
         public static void* Allocate(int size)
         {
             void* location = Marshal.AllocHGlobal(size).ToPointer();
             InsertAllocationInfo(size, location);
             return location;
         }
+
+        public static void* Reallocate(void* prev, int size)
+        {
+            RemoveAllocationInfo(prev);
+            void* location = Marshal.ReAllocHGlobal(new IntPtr(prev), new IntPtr(size)).ToPointer();
+            InsertAllocationInfo(size, location);
+            return location;
+        }
+
         public static void Free(void* ptr)
         {
             Marshal.FreeHGlobal(new IntPtr(ptr));

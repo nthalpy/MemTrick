@@ -34,11 +34,18 @@ namespace MemTrick.CLR
             }
         }
 
-        internal void* DataStartPoint
+        internal void* ClassDataStartPoint
         {
             get
             {
                 return ptr + 1;
+            }
+        }
+        internal void* StructDataStartPoint
+        {
+            get
+            {
+                return ptr;
             }
         }
 
@@ -56,8 +63,8 @@ namespace MemTrick.CLR
             MethodTable** p = ptr;
             PublicTypedReference typedReference = new PublicTypedReference
             {
-                ObjectBodyPointerRef = &p,
-                MethodTablePointer = MethodTable.GetMethodTable<T>(),
+                Value = &p,
+                Type = MethodTable.GetMethodTable<T>(),
             };
 
             return __refvalue(*(TypedReference*)&typedReference, T);

@@ -17,14 +17,13 @@ namespace MemTrick.CLR
             ObjectRef objRef = new ObjectRef((ObjectHeader*)RawMemoryAllocator.Allocate(size));
 
             TypedReference tr = __makeref(val);
-            void* srcBase = *(IntPtr**)&tr;
+            void* src = *(IntPtr**)&tr;
 
             objRef.SyncBlock = 0;
             objRef.MethodTablePtr = mt;
-            void* dstBase = objRef.DataStartPoint;
+            void* dst = objRef.ClassDataStartPoint;
 
-            for (int idx = 0; idx < (mt->BaseSize - sizeof(ObjectHeader)) / 4; idx++)
-                *((Int32*)dstBase + idx) = *((Int32*)srcBase + idx);
+            RawMemoryAllocator.MemCpy(dst, src, mt->DataSize);
 
             return objRef;
         }
