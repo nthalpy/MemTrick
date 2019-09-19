@@ -18,6 +18,14 @@ namespace MemTrick.CLR.RumtimeSpecific
             return (MethodTable*)t.TypeHandle.Value;
         }
 
+        public unsafe static MethodTable* GetArrayMethodTable<TElem>()
+        {
+            TElem[] emptyArray = Array.Empty<TElem>();
+            TypedReference tr = __makeref(emptyArray);
+
+            return ***(MethodTable****)&tr;
+        }
+
         [FieldOffset(0)]
         public Int32 Flags;
 

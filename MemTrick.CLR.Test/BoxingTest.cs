@@ -7,33 +7,41 @@ namespace MemTrick.CLR.Test
     [TestClass]
     public unsafe class MethodTableTest
     {
-        private int AlignSizeBy4(int size)
+        private int AlignSizeByPointerSize(int size)
         {
-            if (size % 4 == 0)
+            int pointerSize = sizeof(IntPtr);
+
+            if (size % pointerSize == 0)
                 return size;
             else
-                return size + 4 - size % 4;
+                return 1 + (size | (pointerSize - 1));
+        }
+
+        [TestMethod]
+        public void ObjectHeaderSize()
+        {
+            Assert.AreEqual(sizeof(ObjectHeader), 2 * sizeof(IntPtr));
         }
 
         /// <summary>
         /// Compare base size field of method table with known values.
         /// </summary>
         [TestMethod]
-        public void TestPrimitiveTypeSize()
+        public void PrimitiveTypeSize()
         {
             MethodTable* byteMt = MethodTable.GetMethodTable<Byte>();
             Assert.AreEqual(
-                AlignSizeBy4(sizeof(ObjectHeader) + sizeof(Byte)),
+                AlignSizeByPointerSize(sizeof(ObjectHeader) + sizeof(Byte)),
                 byteMt->BaseSize);
 
             MethodTable* intMt = MethodTable.GetMethodTable<Int32>();
             Assert.AreEqual(
-                sizeof(ObjectHeader) + sizeof(Int32),
+                AlignSizeByPointerSize(sizeof(ObjectHeader) + sizeof(Int32)),
                 intMt->BaseSize);
 
             MethodTable* doubleMt = MethodTable.GetMethodTable<Double>();
             Assert.AreEqual(
-                sizeof(ObjectHeader) + sizeof(Double),
+                AlignSizeByPointerSize(sizeof(ObjectHeader) + sizeof(Double)),
                 doubleMt->BaseSize);
         }
 
@@ -41,7 +49,7 @@ namespace MemTrick.CLR.Test
         /// Compare base size and component size with known values.
         /// </summary>
         [TestMethod]
-        public void TestStringSize()
+        public void StringSize()
         {
             MethodTable* stringMt = MethodTable.GetMethodTable<String>();
             Assert.IsTrue(stringMt->HasComponentSize());
@@ -49,7 +57,7 @@ namespace MemTrick.CLR.Test
                 sizeof(Char),
                 stringMt->ComponentSize);
             Assert.AreEqual(
-                sizeof(ObjectHeader) + sizeof(Int32) + sizeof(Char),
+                AlignSizeByPointerSize(sizeof(ObjectHeader) + sizeof(Int32)) + sizeof(Char),
                 stringMt->BaseSize);
         }
 
