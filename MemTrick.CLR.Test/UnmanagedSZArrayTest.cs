@@ -17,7 +17,7 @@ namespace MemTrick.CLR.Test
             for (int idx = 0; idx < original.Length; idx++)
                 original[idx] = rd.Next();
 
-            using (UnmanagedSZArray<int> intSZArray = UnmanagedSZArray<int>.Create(30))
+            using (UnmanagedSZArray<int> intSZArray = UnmanagedSZArray<int>.Create(size))
             {
                 int[] arr = intSZArray.Array;
 

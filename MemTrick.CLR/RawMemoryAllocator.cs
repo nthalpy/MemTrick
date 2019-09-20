@@ -14,9 +14,7 @@ namespace MemTrick.CLR
             public void* Location;
         }
 
-#if DEBUG
         private static Dictionary<IntPtr, AllocationInfo> allocationInfoDict;
-#endif
 
         static RawMemoryAllocator()
         {

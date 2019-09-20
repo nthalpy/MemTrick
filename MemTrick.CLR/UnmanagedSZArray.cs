@@ -5,7 +5,7 @@ namespace MemTrick.CLR
 {
     /// <summary>
     /// Unmanaged array with element type T.
-    /// Do not allocate this with default constructor; use static method UnmanagedSZArray`1.Create(int).
+    /// Please do not allocate this with default constructor; use static method UnmanagedSZArray`1.Create(int).
     /// </summary>
     /// <typeparam name="T"></typeparam>
     internal unsafe struct UnmanagedSZArray<T> : IDisposable

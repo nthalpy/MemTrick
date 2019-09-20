@@ -42,7 +42,7 @@ namespace MemTrick.CLR.RumtimeSpecific
                 return BaseSize - sizeof(ObjectHeader);
             }
         }
-        
+
         /// <summary>
         /// We need this property because Type.IsClass is extremely slow.
         /// </summary>
