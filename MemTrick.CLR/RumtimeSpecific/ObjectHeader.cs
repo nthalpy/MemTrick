@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace MemTrick.CLR.RumtimeSpecific
 {
@@ -10,13 +11,13 @@ namespace MemTrick.CLR.RumtimeSpecific
     {
         public static MethodTable** GetMethodTablePointer(ObjectHeader* headerPtr)
         {
-            return (MethodTable**)((int*)headerPtr + 1);
+            return (MethodTable**)((Int32*)headerPtr + 1);
         }
 
-        public int SyncBlock;
+        public Int32 SyncBlock;
 
 #if _TARGET_64BIT_
-        private int Pad;
+        private Int32 Pad;
 #endif
 
         public MethodTable* MethodTable;
