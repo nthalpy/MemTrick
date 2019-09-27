@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Linq;
 
 namespace MemTrick.CLR.Test
 {
@@ -17,6 +16,7 @@ namespace MemTrick.CLR.Test
             for (int idx = 0; idx < original.Length; idx++)
                 original[idx] = rd.Next();
 
+            bool result;
             using (MemoryRestrictorHandle h = MemoryRestrictor.StartNoAlloc())
             using (UnmanagedSZArray<int> intSZArray = UnmanagedSZArray<int>.Create(size))
             {
@@ -25,8 +25,15 @@ namespace MemTrick.CLR.Test
                 for (int idx = 0; idx < arr.Length; idx++)
                     arr[idx] = original[idx];
 
-                Assert.IsTrue(arr.SequenceEqual(arr));
+                // Note that we can't use IEnumerable`1.SequenceEquals, because it uses GetEnumerator, and
+                // SZArrayHelper.GetEnumerator makes object in heap.
+                result = true;
+                result &= (arr.Length == original.Length);
+                for (int idx = 0; idx < arr.Length; idx++)
+                    result &= (arr[idx] == original[idx]);
             }
+
+            Assert.IsTrue(result);
         }
     }
 }

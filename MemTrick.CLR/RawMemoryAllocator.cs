@@ -18,10 +18,10 @@ namespace MemTrick.CLR
 
         static RawMemoryAllocator()
         {
-#if DEBUG
-            allocationInfoDict = new Dictionary<IntPtr, AllocationInfo>(4096);
-            Process.GetCurrentProcess().Exited += RawMemoryAllocator_Exited;
-#endif
+//#if DEBUG
+//            allocationInfoDict = new Dictionary<IntPtr, AllocationInfo>(4096);
+//            Process.GetCurrentProcess().Exited += RawMemoryAllocator_Exited;
+//#endif
         }
 
         private static void RawMemoryAllocator_Exited(Object sender, EventArgs e)
@@ -41,25 +41,25 @@ namespace MemTrick.CLR
         [Conditional("DEBUG")]
         private static void InsertAllocationInfo(int size, void* location)
         {
-            lock (allocationInfoDict)
-            {
-                allocationInfoDict.Add(
-                    new IntPtr(location),
-                    new AllocationInfo { Size = size, Location = location });
-            }
+            //lock (allocationInfoDict)
+            //{
+            //    allocationInfoDict.Add(
+            //        new IntPtr(location),
+            //        new AllocationInfo { Size = size, Location = location });
+            //}
         }
         [Conditional("DEBUG")]
         private static void RemoveAllocationInfo(void* location)
         {
-            lock (allocationInfoDict)
-            {
-                IntPtr key = new IntPtr(location);
+            //lock (allocationInfoDict)
+            //{
+            //    IntPtr key = new IntPtr(location);
 
-                if (allocationInfoDict.ContainsKey(key) == false)
-                    throw new KeyNotFoundException($"Pointer {key} is not allocated with {nameof(RawMemoryAllocator)}.");
+            //    if (allocationInfoDict.ContainsKey(key) == false)
+            //        throw new KeyNotFoundException($"Pointer {key} is not allocated with {nameof(RawMemoryAllocator)}.");
 
-                allocationInfoDict.Remove(key);
-            }
+            //    allocationInfoDict.Remove(key);
+            //}
         }
 
         public static void MemCpy(void* dst, void* src, int size)

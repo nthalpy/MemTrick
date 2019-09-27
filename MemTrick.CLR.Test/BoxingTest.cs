@@ -9,6 +9,8 @@ namespace MemTrick.CLR.Test
         [TestMethod]
         public void Int32BoxingTest()
         {
+            bool result;
+
             using (MemoryRestrictorHandle h = MemoryRestrictor.StartNoAlloc())
             {
                 int val = 0x12345678;
@@ -16,11 +18,11 @@ namespace MemTrick.CLR.Test
                 using (ObjectRef objRef = Boxing.Box(val))
                 {
                     Object boxed = objRef.GetObject();
-                    Assert.AreEqual(
-                        val,
-                        boxed);
+                    result = val.Equals(boxed);
                 }
             }
+
+            Assert.IsTrue(result);
         }
     }
 }
