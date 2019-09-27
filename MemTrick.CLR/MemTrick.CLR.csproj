@@ -83,8 +83,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyPattern.cs" />
     <Compile Include="Boxing.cs" />
+    <Compile Include="CrawlResult.cs" />
+    <Compile Include="MemoryCrawler.cs" />
     <Compile Include="MemoryLeakException.cs" />
+    <Compile Include="NewHijacker.cs" />
     <Compile Include="ObjectRef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicTypedReference.cs" />

@@ -19,7 +19,7 @@ namespace MemTrick.CLR
         static RawMemoryAllocator()
         {
 #if DEBUG
-            allocationInfoDict = new Dictionary<IntPtr, AllocationInfo>();
+            allocationInfoDict = new Dictionary<IntPtr, AllocationInfo>(4096);
             Process.GetCurrentProcess().Exited += RawMemoryAllocator_Exited;
 #endif
         }
@@ -70,7 +70,7 @@ namespace MemTrick.CLR
             for (int idx = 0; idx < size; idx += 4)
                 *d++ = *s++;
         }
-                
+
         public static void* Allocate(int size)
         {
             void* location = Marshal.AllocHGlobal(size).ToPointer();

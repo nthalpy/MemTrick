@@ -92,6 +92,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoxingTest.cs" />
+    <Compile Include="MemoryRestrictor.cs" />
+    <Compile Include="MemoryRestrictorException.cs" />
+    <Compile Include="MemoryRestrictorHandle.cs" />
+    <Compile Include="MemoryRestrictorTest.cs" />
+    <Compile Include="MethodTableTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnmanagedSZArrayTest.cs" />
   </ItemGroup>
