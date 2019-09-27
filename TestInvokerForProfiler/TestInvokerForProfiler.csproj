@@ -96,10 +96,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MemTrick.CLR.Test\MemTrick.CLR.Test.csproj">
-      <Project>{f15432c3-1a22-4d98-8444-bfbfdadb2a7a}</Project>
-      <Name>MemTrick.CLR.Test</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MemTrick.CLR\MemTrick.CLR.csproj">
       <Project>{c0d363b3-55bb-4c6d-9279-621b878fff2b}</Project>
       <Name>MemTrick.CLR</Name>

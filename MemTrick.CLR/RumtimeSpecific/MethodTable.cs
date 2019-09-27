@@ -20,7 +20,7 @@ namespace MemTrick.CLR.RumtimeSpecific
 
         public unsafe static MethodTable* GetArrayMethodTable<TElem>()
         {
-            TElem[] emptyArray = Array.Empty<TElem>();
+            TElem[] emptyArray = ArrayHolder<TElem>.Empty;
             TypedReference tr = __makeref(emptyArray);
 
             return ***(MethodTable****)&tr;
