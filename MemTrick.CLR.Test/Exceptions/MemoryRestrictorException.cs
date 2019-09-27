@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MemTrick.CLR.Test
+namespace MemTrick.CLR.Test.Exceptions
 {
     [Serializable]
     internal class MemoryRestrictorException : Exception

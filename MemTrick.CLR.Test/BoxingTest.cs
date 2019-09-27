@@ -1,28 +1,27 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using MemTrick.CLR.Test.Infra;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
 namespace MemTrick.CLR.Test
 {
     [TestClass]
-    public unsafe class BoxingTest
+    public sealed class BoxingTest : TestBase
     {
         [TestMethod]
         public void Int32BoxingTest()
         {
-            bool result;
-
-            using (MemoryRestrictorHandle h = MemoryRestrictor.StartNoAlloc())
+            using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
             {
                 int val = 0x12345678;
 
                 using (ObjectRef objRef = Boxing.Box(val))
                 {
                     Object boxed = objRef.GetObject();
-                    result = val.Equals(boxed);
+
+                    MemoryRestrictor.EndNoAlloc();
+                    Assert.AreEqual(boxed, val);
                 }
             }
-
-            Assert.IsTrue(result);
         }
     }
 }

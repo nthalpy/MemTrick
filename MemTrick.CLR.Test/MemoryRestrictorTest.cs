@@ -1,10 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using MemTrick.CLR.Test.Exceptions;
+using MemTrick.CLR.Test.Infra;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
 namespace MemTrick.CLR.Test
 {
     [TestClass]
-    public sealed class MemoryRestrictorTest
+    public sealed class MemoryRestrictorTest : TestBase
     {
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext tc)
@@ -22,7 +24,7 @@ namespace MemTrick.CLR.Test
         [ExpectedException(typeof(MemoryRestrictorException))]
         public void TestAllocation()
         {
-            using (MemoryRestrictorHandle handle = MemoryRestrictor.StartNoAlloc())
+            using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
             {
                 Assert.IsNotNull(new Object());
             }

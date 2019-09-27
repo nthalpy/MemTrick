@@ -5,7 +5,7 @@ using System;
 namespace MemTrick.CLR.Test
 {
     [TestClass]
-    public unsafe class MethodTableTest
+    public unsafe sealed class MethodTableTest : TestBase
     {
         private int AlignSizeByPointerSize(int size)
         {

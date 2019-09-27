@@ -1,10 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using MemTrick.CLR.Test.Infra;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 
 namespace MemTrick.CLR.Test
 {
     [TestClass]
-    public unsafe class UnmanagedSZArrayTest
+    public sealed class UnmanagedSZArrayTest : TestBase
     {
         [TestMethod]
         public void PrimitiveOperation()
@@ -16,24 +18,19 @@ namespace MemTrick.CLR.Test
             for (int idx = 0; idx < original.Length; idx++)
                 original[idx] = rd.Next();
 
-            bool result;
-            using (MemoryRestrictorHandle h = MemoryRestrictor.StartNoAlloc())
-            using (UnmanagedSZArray<int> intSZArray = UnmanagedSZArray<int>.Create(size))
+            using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
             {
-                int[] arr = intSZArray.Array;
+                using (UnmanagedSZArray<int> intSZArray = UnmanagedSZArray<int>.Create(size))
+                {
+                    int[] arr = intSZArray.Array;
 
-                for (int idx = 0; idx < arr.Length; idx++)
-                    arr[idx] = original[idx];
+                    for (int idx = 0; idx < arr.Length; idx++)
+                        arr[idx] = original[idx];
 
-                // Note that we can't use IEnumerable`1.SequenceEquals, because it uses GetEnumerator, and
-                // SZArrayHelper.GetEnumerator makes object in heap.
-                result = true;
-                result &= (arr.Length == original.Length);
-                for (int idx = 0; idx < arr.Length; idx++)
-                    result &= (arr[idx] == original[idx]);
+                    MemoryRestrictor.EndNoAlloc();
+                    Assert.IsTrue(arr.SequenceEqual(original));
+                }
             }
-
-            Assert.IsTrue(result);
         }
     }
 }
