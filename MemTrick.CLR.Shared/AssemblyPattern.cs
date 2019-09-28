@@ -8,7 +8,7 @@ namespace MemTrick.CLR
     internal sealed class AssemblyPattern
     {
         #region static fields
-        public readonly static AssemblyPattern CLR_JIT_TrialAllocSFastMP_InlineGetThread = new AssemblyPattern(
+        public readonly static AssemblyPattern CLR_X64_JIT_TrialAllocSFastMP_InlineGetThread = new AssemblyPattern(
             // Assembly dumped from WinDbg, with runtime .NET Framework 4.7.2 is following, 
             // but maybe some constants can be different by runtimes.
             //
@@ -53,7 +53,7 @@ namespace MemTrick.CLR
         /// <summary>
         /// Offset of rel32 address which locates somewhere out method, like JIT_New, __tls_index, ...
         /// </summary>
-        public readonly int[] NonLocalRel32Offset;
+        public readonly int[] ExternalRel32Offset;
         
         public int Size
         {
@@ -63,10 +63,10 @@ namespace MemTrick.CLR
             }
         }
 
-        private AssemblyPattern(Nullable<Byte>[] pattern, int[] nonLocalRel32Offset)
+        private AssemblyPattern(Nullable<Byte>[] pattern, int[] externalRel32Offset)
         {
             this.pattern = pattern;
-            NonLocalRel32Offset = nonLocalRel32Offset;
+            ExternalRel32Offset = externalRel32Offset;
         }
 
         public unsafe bool IsMatches(void* ptr)

@@ -33,8 +33,21 @@ namespace MemTrick.CLR
             if (AllocatorCache != null)
                 return AllocatorCache;
 
+            if (AllocatorCache == null)
+                AllocatorCache = CheckMatch(AssemblyPattern.CLR_X64_JIT_TrialAllocSFastMP_InlineGetThread);
+            if (AllocatorCache == null)
+                AllocatorCache = CheckMatch(AssemblyPattern.CLR_X86_JIT_TrialAllocSFastMP_InlineGetThread);
+            
+            if (AllocatorCache != null)
+                return AllocatorCache;
+            
+            throw new NotSupportedException("Unable to find allocator.");
+        }
+
+        public static CrawlResult CheckMatch(AssemblyPattern pattern)
+        {
             Byte* p = (Byte*)BaseAddress;
-            AssemblyPattern pattern = AssemblyPattern.CLR_JIT_TrialAllocSFastMP_InlineGetThread;
+
             for (int idx = 0; idx < ModuleMemorySize - pattern.Size; idx++)
             {
                 if (pattern.IsMatches(p + idx))
@@ -44,7 +57,7 @@ namespace MemTrick.CLR
                 }
             }
 
-            throw new NotSupportedException("Unable to find allocator.");
+            return null;
         }
     }
 }

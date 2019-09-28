@@ -52,7 +52,7 @@ namespace MemTrick.CLR
             {
                 int adjust = (int)(src - dst);
 
-                foreach (int offset in AllocatorCrawlResult.Pattern.NonLocalRel32Offset)
+                foreach (int offset in AllocatorCrawlResult.Pattern.ExternalRel32Offset)
                     *(Int32*)(dst + offset) += adjust;
             }
         }
