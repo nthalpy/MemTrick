@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MemTrick.CLR\MemTrick.CLR.csproj" />
+    <ProjectReference Include="..\MemTrick.CLR.x86\MemTrick.CLR.x86.csproj" />
   </ItemGroup>
 
   <Import Project="..\MemTrick.CLR.Test.Shared\MemTrick.CLR.Test.Shared.projitems" Label="Shared" />

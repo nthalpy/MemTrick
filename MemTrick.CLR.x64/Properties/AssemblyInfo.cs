@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 어셈블리에 대한 일반 정보는 다음 특성 집합을 통해 
 // 제어됩니다. 어셈블리와 관련된 정보를 수정하려면
 // 이러한 특성 값을 변경하세요.
-[assembly: AssemblyTitle("MemTrick.CLR")]
+[assembly: AssemblyTitle("MemTrick.CLR.x64")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MemTrick.CLR")]
+[assembly: AssemblyProduct("MemTrick.CLR.x64")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -36,5 +36,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: InternalsVisibleTo("MemTrick.CLR.Test.x64")]
-[assembly: InternalsVisibleTo("MemTrick.CLR.Test.x86")]
-[assembly: InternalsVisibleTo("TestInvokerForProfiler")]

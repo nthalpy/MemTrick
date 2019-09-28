@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>710c8077-b9ec-4adc-a925-6540bdb24f6e</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>MemTrick.CLR</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ArrayHolder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AssemblyPattern.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Boxing.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CrawlResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MemoryCrawler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MemoryLeakException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NewHijacker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ObjectRef.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PublicTypedReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RawMemoryAllocator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\MethodTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ObjectHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SZArrayHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UnmanagedSZArray.cs" />
+  </ItemGroup>
+</Project>

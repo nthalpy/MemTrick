@@ -4,7 +4,6 @@
     <TargetFrameworks>
       NET45;NET451;NET452;NET46;NET461;NET462;NET47;NET471;NET472;NET48;
     </TargetFrameworks>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -21,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MemTrick.CLR\MemTrick.CLR.csproj" />
+    <ProjectReference Include="..\MemTrick.CLR.x64\MemTrick.CLR.x64.csproj" />
   </ItemGroup>
 
   <Import Project="..\MemTrick.CLR.Test.Shared\MemTrick.CLR.Test.Shared.projitems" Label="Shared" />

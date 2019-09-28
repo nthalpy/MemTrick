@@ -6,7 +6,7 @@
     <SharedGUID>275d797b-f396-4305-b1ff-694f884c46c7</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>MemTrick.CLR.Test.Shared</Import_RootNamespace>
+    <Import_RootNamespace>MemTrick.CLR.Test</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)BoxingTest.cs" />
