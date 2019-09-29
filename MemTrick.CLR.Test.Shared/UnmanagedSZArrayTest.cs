@@ -19,17 +19,15 @@ namespace MemTrick.CLR.Test
                 original[idx] = rd.Next();
 
             using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
+            using (UnmanagedSZArray<int> intSZArray = UnmanagedSZArray<int>.Create(size))
             {
-                using (UnmanagedSZArray<int> intSZArray = UnmanagedSZArray<int>.Create(size))
-                {
-                    int[] arr = intSZArray.Array;
+                int[] arr = intSZArray.Array;
 
-                    for (int idx = 0; idx < arr.Length; idx++)
-                        arr[idx] = original[idx];
+                for (int idx = 0; idx < arr.Length; idx++)
+                    arr[idx] = original[idx];
 
-                    MemoryRestrictor.EndNoAlloc();
-                    Assert.IsTrue(arr.SequenceEqual(original));
-                }
+                MemoryRestrictor.EndNoAlloc();
+                Assert.IsTrue(arr.SequenceEqual(original));
             }
         }
     }
