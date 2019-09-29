@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MemTrick.CLR.RumtimeSpecific;
+using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -13,7 +14,7 @@ namespace MemTrick.CLR
             IntPtr hProcess, IntPtr lpAddress,
             UIntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
 
-        private static CrawlResult AllocatorCrawlResult;
+        private static void* AllocatorLocation;
         private static UInt64 Backup;
 
         private static Action<IntPtr> PreAllocate;
@@ -22,8 +23,7 @@ namespace MemTrick.CLR
         public static void Hijack(Action<IntPtr> preAllocate)
         {
             PreAllocate = preAllocate;
-
-            AllocatorCrawlResult = MemoryCrawler.FindAllocator();
+            AllocatorLocation = MemoryCrawler.FindAllocator();
 
             CopyAllocator();
             HijackAllocator();
@@ -36,24 +36,22 @@ namespace MemTrick.CLR
                 .MethodHandle;
             RuntimeHelpers.PrepareMethod(mh);
 
-            void* jitted = *((void**)mh.Value + 1);
+            void* jitted = *(void**)((Byte*)mh.Value + 8);
             if (*(Byte*)jitted == 0xE9) // is this jump stub?
                 jitted = (Byte*)jitted + *(Int32*)((Byte*)jitted + 1) + 5;
 
-            Byte* src = (Byte*)AllocatorCrawlResult.Location;
+            Byte* src = (Byte*)AllocatorLocation;
             Byte* dst = (Byte*)jitted;
 
-            for (int idx = 0; idx < AllocatorCrawlResult.Pattern.Size; idx++)
+            // 0x60 should be enough.
+            for (int idx = 0; idx < 0x60; idx++)
                 dst[idx] = src[idx];
 
-            // mov r11d, rel32나 jmp rel32의 값을 변경해줘야 한다.
-            // mov r11d, dword ptr [coreclr!_tls_index]와 jmp JIT_New가 그 대상이다.
+            // scan whold method, adjust external rel32 addresses.
             checked
             {
                 int adjust = (int)(src - dst);
-
-                foreach (int offset in AllocatorCrawlResult.Pattern.ExternalRel32Offset)
-                    *(Int32*)(dst + offset) += adjust;
+                MachineCodeHelper.AdjustExternalRel32(dst, 0x60, adjust);
             }
         }
         private static void HijackAllocator()
@@ -61,8 +59,8 @@ namespace MemTrick.CLR
             RuntimeMethodHandle mh = typeof(NewHijacker)
                 .GetMethod(nameof(NewHijacker.Allocator), BindingFlags.NonPublic | BindingFlags.Static)
                 .MethodHandle;
-            void* precode = *((void**)mh.Value + 1);
-            void* originalAllocator = AllocatorCrawlResult.Location;
+            void* precode = *(void**)((Byte*)mh.Value + 8);
+            void* originalAllocator = AllocatorLocation;
 
             // jmp rel32
             UInt64 jmp = 0xE9;
@@ -80,7 +78,7 @@ namespace MemTrick.CLR
         }
         public static void Restore()
         {
-            *(UInt64*)(AllocatorCrawlResult.Location) = Backup;
+            *(UInt64*)AllocatorLocation = Backup;
         }
 
         // Important:

@@ -10,15 +10,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ArrayHolder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)AssemblyPattern.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Boxing.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CrawlResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MemoryCrawler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MemoryLeakException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NewHijacker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObjectRef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PublicTypedReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RawMemoryAllocator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\MachineCodeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\MethodTable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ObjectHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SZArrayHeader.cs" />

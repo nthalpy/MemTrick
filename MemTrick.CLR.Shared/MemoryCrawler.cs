@@ -11,7 +11,8 @@ namespace MemTrick.CLR
         private static readonly void* BaseAddress;
         private static readonly int ModuleMemorySize;
 
-        private static CrawlResult AllocatorCache;
+        private const String DacTableResourceName = "COREXTERNALDATAACCESSRESOURCE";
+        private static UInt32* DacTable;
 
         static MemoryCrawler()
         {
@@ -28,36 +29,44 @@ namespace MemTrick.CLR
                 throw new Exception("Unable to find proper runtime module (clr/coreclr).");
         }
 
-        public static CrawlResult FindAllocator()
-        {
-            if (AllocatorCache != null)
-                return AllocatorCache;
-
-            if (AllocatorCache == null)
-                AllocatorCache = CheckMatch(AssemblyPattern.CLR_X64_JIT_TrialAllocSFastMP_InlineGetThread);
-            if (AllocatorCache == null)
-                AllocatorCache = CheckMatch(AssemblyPattern.CLR_X86_JIT_TrialAllocSFastMP_InlineGetThread);
-            
-            if (AllocatorCache != null)
-                return AllocatorCache;
-            
-            throw new NotSupportedException("Unable to find allocator.");
-        }
-
-        public static CrawlResult CheckMatch(AssemblyPattern pattern)
+        public static void InitializeDac()
         {
             Byte* p = (Byte*)BaseAddress;
 
-            for (int idx = 0; idx < ModuleMemorySize - pattern.Size; idx++)
+            for (int offset = 0; offset < ModuleMemorySize - DacTableResourceName.Length * 2; offset++)
             {
-                if (pattern.IsMatches(p + idx))
+                bool matches = true;
+                for (int idx = 0; idx < DacTableResourceName.Length; idx++)
                 {
-                    AllocatorCache = new CrawlResult(p + idx, pattern);
-                    return AllocatorCache;
+                    if ((p + offset)[2 * idx] != DacTableResourceName[idx]
+                        || (p + offset)[2 * idx + 1] != 0)
+                    {
+                        matches = false;
+                        break;
+                    }
+                }
+
+                if (matches)
+                {
+                    DacTable = (UInt32*)(p + offset + 0x78);
+                    break;
                 }
             }
 
-            return null;
+            if (DacTable == null)
+                throw new NotSupportedException("Unable to find DAC Table!");
+        }
+
+        public static void* FindAllocator()
+        {
+            if (DacTable == null)
+                InitializeDac();
+
+            // DacTable[8]: clr!hlpDynamicFuncTable
+            void** hlpDynamicFuncTable = (void**)((Byte*)BaseAddress + DacTable[8]);
+
+            // hlpDynamicFuncTable[3]: CORINFO_HELP_NEWSFAST
+            return hlpDynamicFuncTable[3];
         }
     }
 }
