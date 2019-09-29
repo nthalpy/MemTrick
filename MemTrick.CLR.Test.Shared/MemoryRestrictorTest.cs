@@ -26,7 +26,10 @@ namespace MemTrick.CLR.Test
         {
             using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
             {
-                Assert.IsNotNull(new Object());
+                Object obj = new Object();
+
+                // Need to use obj variable to prevent being optimized out.
+                Assert.IsNotNull(obj);
             }
         }
     }
