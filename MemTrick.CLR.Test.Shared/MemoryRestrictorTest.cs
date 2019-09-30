@@ -2,7 +2,6 @@
 using MemTrick.CLR.Test.Infra;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace MemTrick.CLR.Test
