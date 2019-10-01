@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MemTrick.CLR
+namespace MemTrick.CLR.RumtimeSpecific
 {
     [StructLayout(LayoutKind.Sequential)]
     internal struct SZArrayHeader
