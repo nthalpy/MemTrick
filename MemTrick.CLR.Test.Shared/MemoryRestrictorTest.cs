@@ -29,6 +29,7 @@ namespace MemTrick.CLR.Test
             {
                 Object obj = new Object();
 
+                MemoryRestrictor.EndNoAlloc();
                 // Need to use 'obj' variable to prevent being optimized out.
                 Assert.IsNotNull(obj);
             }
@@ -39,17 +40,18 @@ namespace MemTrick.CLR.Test
         public void ThrowOnLinq()
         {
             int[] array = new int[] { 1, 2, 3, 4 };
-            int sum = 0;
 
             using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
             {
                 // Enumerable.Sum(this IEnumerable`1) extension method internally uses 
                 // IEnumerable`1.GetEnumerator, and invoking IEnumerable`1.GetEnumerator
                 // on array makes allocation. (See SZArrayHelper.GetEnumerator method)
-                sum = array.Sum();
+                int sum = array.Sum();
+
+                MemoryRestrictor.EndNoAlloc();
+                Assert.AreEqual(sum, 10);
             }
 
-            Assert.AreEqual(sum, 10);
         }
 
         [TestMethod]
@@ -62,9 +64,24 @@ namespace MemTrick.CLR.Test
             {
                 int intValue = 0x123123;
 
+                MemoryRestrictor.EndNoAlloc();
                 // Invoking Object.GetHashCode will box 'intValue' variable first,
                 // Then invoke it with.
                 Assert.IsTrue(intValue.GetHashCode() == intValue);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(MemoryRestrictorException))]
+        // TODO: Make this test pass by hijacking String.FastAllocateString method.
+        public void ThrowOnStringConcatenation()
+        {
+            using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
+            {
+                String s = String.Concat("A", "B");
+
+                MemoryRestrictor.EndNoAlloc();
+                Assert.AreEqual(s.Length, 2);
             }
         }
     }
