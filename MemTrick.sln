@@ -7,22 +7,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemTrick.CLR.x64", "MemTric
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{E0647BC6-0405-403D-954B-37F9F589C52C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemTrick.CLR.Test.x86", "MemTrick.CLR.Test.x86\MemTrick.CLR.Test.x86.csproj", "{56941390-D847-4F40-83F4-46EA441DC0E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemTrick.Test.CLR.x86", "MemTrick.CLR.Test.x86\MemTrick.Test.CLR.x86.csproj", "{56941390-D847-4F40-83F4-46EA441DC0E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemTrick.CLR.Test.x64", "MemTrick.CLR.Test.x64\MemTrick.CLR.Test.x64.csproj", "{CACF21B5-C8BB-43DC-A771-A2DA6FA50985}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemTrick.Test.CLR.x64", "MemTrick.CLR.Test.x64\MemTrick.Test.CLR.x64.csproj", "{CACF21B5-C8BB-43DC-A771-A2DA6FA50985}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MemTrick.CLR.Test.Shared", "MemTrick.CLR.Test.Shared\MemTrick.CLR.Test.Shared.shproj", "{275D797B-F396-4305-B1FF-694F884C46C7}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MemTrick.Test", "MemTrick.Test\MemTrick.Test.shproj", "{275D797B-F396-4305-B1FF-694F884C46C7}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MemTrick.CLR.Shared", "MemTrick.CLR.Shared\MemTrick.CLR.Shared.shproj", "{710C8077-B9EC-4ADC-A925-6540BDB24F6E}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MemTrick", "MemTrick\MemTrick.shproj", "{710C8077-B9EC-4ADC-A925-6540BDB24F6E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemTrick.CLR.x86", "MemTrick.CLR.x86\MemTrick.CLR.x86.csproj", "{07AFB57E-FF31-4E19-80BE-AE0268C3C165}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		MemTrick.CLR.Shared\MemTrick.CLR.Shared.projitems*{07afb57e-ff31-4e19-80be-ae0268c3c165}*SharedItemsImports = 4
-		MemTrick.CLR.Test.Shared\MemTrick.CLR.Test.Shared.projitems*{275d797b-f396-4305-b1ff-694f884c46c7}*SharedItemsImports = 13
-		MemTrick.CLR.Shared\MemTrick.CLR.Shared.projitems*{710c8077-b9ec-4adc-a925-6540bdb24f6e}*SharedItemsImports = 13
-		MemTrick.CLR.Shared\MemTrick.CLR.Shared.projitems*{c0d363b3-55bb-4c6d-9279-621b878fff2b}*SharedItemsImports = 4
+		MemTrick\MemTrick.projitems*{07afb57e-ff31-4e19-80be-ae0268c3c165}*SharedItemsImports = 4
+		MemTrick.Test\MemTrick.Test.projitems*{275d797b-f396-4305-b1ff-694f884c46c7}*SharedItemsImports = 13
+		MemTrick\MemTrick.projitems*{710c8077-b9ec-4adc-a925-6540bdb24f6e}*SharedItemsImports = 13
+		MemTrick\MemTrick.projitems*{c0d363b3-55bb-4c6d-9279-621b878fff2b}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platform = Debug|Mixed Platform

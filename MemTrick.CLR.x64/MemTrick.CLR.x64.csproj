@@ -48,6 +48,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
-  <Import Project="..\MemTrick.CLR.Shared\MemTrick.CLR.Shared.projitems" Label="Shared" />
+  <Import Project="..\MemTrick\MemTrick.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
