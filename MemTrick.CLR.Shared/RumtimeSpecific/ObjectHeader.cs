@@ -15,7 +15,11 @@ namespace MemTrick.CLR.RumtimeSpecific
         }
 
         public Int32 SyncBlock;
-        
+
+#if _TARGET_64BIT_
+        private Int32 padding;
+#endif
+
         public MethodTable* MethodTable;
     }
 }
