@@ -26,11 +26,6 @@ steps:
     platform: '$(buildPlatform)'
     configuration: 'Debug'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: 'Debug'
-
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -40,4 +35,11 @@ steps:
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
+    testRunTitle: 'Test with Debug configuration'
+    configuration: 'Debug'
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    testRunTitle: 'Test with Release configuration'
     configuration: 'Release'
