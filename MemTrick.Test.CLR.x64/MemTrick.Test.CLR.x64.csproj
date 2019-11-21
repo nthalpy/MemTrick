@@ -5,6 +5,8 @@
       NET45;NET451;NET452;NET46;NET461;NET462;NET47;NET471;NET472;NET48;
     </TargetFrameworks>
     <IsPackable>false</IsPackable>
+    
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup>

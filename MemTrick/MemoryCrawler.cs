@@ -48,7 +48,8 @@ namespace MemTrick
 
                 if (matches)
                 {
-                    DacTable = (UInt32*)(p + offset + 0x78);
+                    // TODO: Remove RuntimeSpecific.DacOffset magic number.
+                    DacTable = (UInt32*)(p + offset + RuntimeSpecific.DacOffset);
                     break;
                 }
             }

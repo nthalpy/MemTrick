@@ -21,7 +21,7 @@ namespace MemTrick.RumtimeSpecific
                 *(Int32*)(p + 0x1B + 1) += adjust;
                 patched = true;
             }
-            if (*(p + 0x03) == 0x44 && *(p + 0x04) == 0x8B && *(p + 0x06) == 0x1D)
+            if (*(p + 0x03) == 0x44 && *(p + 0x04) == 0x8B && *(p + 0x05) == 0x1D)
             {
                 *(Int32*)(p + 0x06) += adjust;
                 patched = true;
