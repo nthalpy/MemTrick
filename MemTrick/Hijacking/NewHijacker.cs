@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace MemTrick
+namespace MemTrick.Hijacking
 {
     public unsafe static class NewHijacker
     {

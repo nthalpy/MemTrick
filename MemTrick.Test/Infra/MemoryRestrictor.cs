@@ -1,4 +1,5 @@
-﻿using MemTrick.Test.Exceptions;
+﻿using MemTrick.Hijacking;
+using MemTrick.Test.Exceptions;
 using System;
 using System.Threading;
 
