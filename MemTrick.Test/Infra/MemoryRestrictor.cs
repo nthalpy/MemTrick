@@ -39,7 +39,31 @@ namespace MemTrick.Test.Infra
         {
             Byte* pSrc = (Byte*)src;
             Byte* pDst = (Byte*)dst;
-
+                 
+            // Works on...
+            // x86 .NET Framework 4.5 ~ 4.8
+            if (
+                pSrc[0] == 0x8B && pSrc[1] == 0x41 && pSrc[2] == 0x04 &&
+                pSrc[3] == 0x64 && pSrc[4] == 0x8B && pSrc[5] == 0x15 &&
+                pSrc[10] == 0x03 && pSrc[11] == 0x42 && pSrc[12] == 0x40 &&
+                pSrc[13] == 0x3B && pSrc[14] == 0x42 && pSrc[15] == 0x44)
+            {
+                RawMemoryAllocator.MemCpy(pDst, pSrc, 16);
+                return new MigrationResult(16, 16);
+            }
+            // Works on... 
+            // x64 .NET Framework 4.5 ~ 4.8
+            // x64 .NET Core 2.0 ~ 2.1
+            else if (
+                pSrc[0] == 0x8B && pSrc[1] == 0x51 && pSrc[2] == 0x04 &&
+                pSrc[3] == 0x65 && pSrc[4] == 0x4C && pSrc[5] == 0x8B && pSrc[6] == 0x1C && pSrc[7] == 0x25 &&
+                pSrc[12] == 0x4D && pSrc[13] == 0x8B && pSrc[14] == 0x53)
+            {
+                RawMemoryAllocator.MemCpy(pDst, pSrc, 16);
+                return new MigrationResult(16, 16);
+            }
+            // Works on...
+            // x64 .NET Core 2.1 ~
             if (
                 pSrc[0] == 0x8B && pSrc[1] == 0x51 && pSrc[2] == 0x04 &&
                 pSrc[3] == 0x44 && pSrc[4] == 0x8B && pSrc[5] == 0x1D &&

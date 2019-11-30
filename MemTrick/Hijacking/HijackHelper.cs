@@ -15,7 +15,7 @@ namespace MemTrick.Hijacking
             // Make sure method is jitted already.
             RuntimeHelpers.PrepareMethod(hook.MethodHandle);
 
-            Byte* pTargetMethod = *((Byte**)target.MethodHandle.Value + 1);
+            Byte* pTargetMethod = *(Byte**)(((Byte*)target.MethodHandle.Value) + 8);
 
             if (pTargetMethod[0] == 0xE9)
             {
@@ -27,7 +27,7 @@ namespace MemTrick.Hijacking
         }
         public static unsafe void HijackUnmanagedMethod(void* target, MethodInfo hook, HijackContextBase context)
         {
-            Byte* pHookMethod = *((Byte**)hook.MethodHandle.Value + 1);
+            Byte* pHookMethod = *(Byte**)(((Byte*)hook.MethodHandle.Value) + 8);
             HijackUnmanagedMethod(target, pHookMethod, context);
         }
         public static unsafe void HijackUnmanagedMethod(void* target, void* hook, HijackContextBase context)
@@ -90,12 +90,27 @@ namespace MemTrick.Hijacking
         {
             Byte* p = (Byte*)target;
 
-            p[0] = 0x48;
-            p[1] = 0xB8;
-            p[10] = 0xFF;
-            p[11] = 0xE0;
+            if (sizeof(void*) == sizeof(Int32))
+            {
+                p[0] = 0xB8;
+                p[5] = 0xFF;
+                p[6] = 0xE0;
 
-            *(void**)(p + 2) = jmpLocation;
+                *(void**)(p + 1) = jmpLocation;
+            }
+            else if (sizeof(void*) == sizeof(Int64))
+            {
+                p[0] = 0x48;
+                p[1] = 0xB8;
+                p[10] = 0xFF;
+                p[11] = 0xE0;
+
+                *(void**)(p + 2) = jmpLocation;
+            }
+            else
+            {
+                throw new ArgumentException("Unexpected pointer size");
+            }
         }
     }
 }
