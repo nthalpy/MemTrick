@@ -45,8 +45,8 @@ namespace MemTrick.Hijacking
             Buffer = (Byte*)Marshal.AllocHGlobal(BufferSize);
             Backup = (Byte*)Marshal.AllocHGlobal(BufferSize);
 
-            MemoryHelper.FillMemory(Buffer, 0xCC, BufferSize);
-            MemoryHelper.FillMemory(Backup, 0xCC, BufferSize);
+            RawMemoryAllocator.FillMemory(Buffer, 0xCC, BufferSize);
+            RawMemoryAllocator.FillMemory(Backup, 0xCC, BufferSize);
 
             Kernel32.VirtualProtectEx(
                 Process.GetCurrentProcess().Handle, (IntPtr)Buffer, (UIntPtr)BufferSize,
