@@ -9,7 +9,7 @@ namespace MemTrick
         static RawMemoryAllocator()
         {
         }
-        
+
         [Conditional("DEBUG")]
         private static void InsertAllocationInfo(int size, void* location)
         {
@@ -21,11 +21,23 @@ namespace MemTrick
 
         public static void MemCpy(void* dst, void* src, int size)
         {
-            int* d = (int*)dst;
-            int* s = (int*)src;
+            Byte* d = (Byte*)dst;
+            Byte* s = (Byte*)src;
 
-            for (int idx = 0; idx < size; idx += 4)
+            for (int idx = 0; idx < size; idx++)
                 *d++ = *s++;
+        }
+
+        public static unsafe void FillMemory(IntPtr dst, Byte c, int byteCount)
+        {
+            FillMemory((void*)dst, c, byteCount);
+        }
+        public static unsafe void FillMemory(void* dst, Byte c, int byteCount)
+        {
+            Byte* d = (Byte*)dst;
+
+            for (int idx = 0; idx < byteCount; idx++)
+                *d++ = c;
         }
 
         public static void* Allocate(int size)

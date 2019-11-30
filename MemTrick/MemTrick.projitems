@@ -11,9 +11,13 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ArrayHolder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Boxing.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hijacking\HijackContextBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hijacking\HijackFuncContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hijacking\HijackHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hijacking\MigrationResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Kernel32.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MemoryCrawler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MemoryLeakException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Hijacking\NewHijacker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObjectRef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PublicTypedReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RawMemoryAllocator.cs" />
@@ -22,8 +26,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ObjectHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\SZArrayHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UnmanagedSZArray.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Hijacking\" />
   </ItemGroup>
 </Project>
