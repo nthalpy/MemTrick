@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace MemTrick.Hijacking
 {
@@ -15,7 +14,7 @@ namespace MemTrick.Hijacking
             // Make sure method is jitted already.
             RuntimeHelpers.PrepareMethod(hook.MethodHandle);
 
-            Byte* pTargetMethod = *(Byte**)(((Byte*)target.MethodHandle.Value) + 8);
+            Byte* pTargetMethod = (Byte*)target.MethodHandle.GetFunctionPointer();
 
             if (pTargetMethod[0] == 0xE9)
             {
@@ -27,7 +26,7 @@ namespace MemTrick.Hijacking
         }
         public static unsafe void HijackUnmanagedMethod(void* target, MethodInfo hook, HijackContextBase context)
         {
-            Byte* pHookMethod = *(Byte**)(((Byte*)hook.MethodHandle.Value) + 8);
+            Byte* pHookMethod = (Byte*)hook.MethodHandle.GetFunctionPointer();
             HijackUnmanagedMethod(target, pHookMethod, context);
         }
         public static unsafe void HijackUnmanagedMethod(void* target, void* hook, HijackContextBase context)
@@ -55,7 +54,7 @@ namespace MemTrick.Hijacking
 
         public static unsafe void RestoreManagedMethod(MethodInfo target, HijackContextBase context)
         {
-            Byte* pTargetMethod = *((Byte**)target.MethodHandle.Value + 1);
+            Byte* pTargetMethod = (Byte*)target.MethodHandle.GetFunctionPointer();
 
             if (pTargetMethod[0] == 0xE9)
             {
