@@ -21,7 +21,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ObjectRef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PublicTypedReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RawMemoryAllocator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\MachineCodeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\MethodTable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ObjectHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\SZArrayHeader.cs" />
