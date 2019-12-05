@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace MemTrick.Hijacking
 {
-    internal static class HijackHelper
+    public static class HijackHelper
     {
         // TODO: Extract all AMD64-related logics to other helper class
 
