@@ -75,14 +75,6 @@ namespace MemTrick.Hijacking
             context.Dispose();
         }
 
-        private static unsafe void CopyAndMoveOffset(void* src, void* dst, int count, ref int offset)
-        {
-            for (int idx = 0; idx < count; idx++)
-                ((Byte*)dst)[offset + idx] = ((Byte*)src)[offset + idx];
-
-            offset += count;
-        }
-
         // Note:
         // This method does not patch atomically, so need to make sure target method is not under use.
         private static unsafe void InsertJump(void* target, void* jmpLocation)
