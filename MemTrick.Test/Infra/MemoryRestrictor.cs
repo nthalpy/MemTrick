@@ -1,6 +1,7 @@
 ﻿using MemTrick.Hijacking;
 using MemTrick.Test.Exceptions;
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 
@@ -14,32 +15,46 @@ namespace MemTrick.Test.Infra
         [ThreadStatic]
         private static bool IsNoAlloc;
 
-        private static HijackFuncContext<IntPtr, Object> HijackContext;
+        private static HijackFuncContext<IntPtr, Object> NewOperatorHijackContext;
+        private static HijackFuncContext<Int32, String> FastAllocateStringHijackContext;
 
         /// <summary>
         /// Hijacks new operator. Hijacked new operator should be restored before AppDomain being unloaded.
         /// </summary>
         public static unsafe void Hijack()
         {
-            HijackContext = new HijackFuncContext<IntPtr, Object>();
-            HijackContext.MigrateInstruction += MigrateInstruction;
+            BindingFlags bindingFlag = BindingFlags.NonPublic | BindingFlags.Static;
 
-            MethodInfo hook = typeof(MemoryRestrictor).GetMethod(nameof(Hook), BindingFlags.NonPublic | BindingFlags.Static);
-            HijackHelper.HijackUnmanagedMethod(MemoryCrawler.FindAllocator(), hook, HijackContext);
+            NewOperatorHijackContext = new HijackFuncContext<IntPtr, Object>();
+            NewOperatorHijackContext.MigrateInstruction += NewOperatorMigrateInstruction;
+            MethodInfo newOperatorHook = typeof(MemoryRestrictor).GetMethod(nameof(NewOperatorHook), bindingFlag);
+            HijackHelper.HijackUnmanagedMethod(MemoryCrawler.FindAllocator(), newOperatorHook, NewOperatorHijackContext);
+
+            //FastAllocateStringHijackContext = new HijackFuncContext<Int32, String>();
+            //FastAllocateStringHijackContext.MigrateInstruction += FastAllocateStringMigrateInstruction;
+            //MethodInfo fastAllocateStringHook = typeof(MemoryRestrictor).GetMethod(nameof(FastAllocateStringHook), bindingFlag);
+            //MethodInfo fastAllocateStringMethodInfo = typeof(String).GetMethod("FastAllocateString", bindingFlag);
+            //HijackHelper.HijackManagedMethod(fastAllocateStringMethodInfo, fastAllocateStringHook, FastAllocateStringHijackContext);
         }
+
+
         /// <summary>
         /// Restores new operator.
         /// </summary>
         public static unsafe void Restore()
         {
-            HijackHelper.RestoreUnmanagedMethod(MemoryCrawler.FindAllocator(), HijackContext);
+            BindingFlags bindingFlag = BindingFlags.NonPublic | BindingFlags.Static;
+            MethodInfo fastAllocateStringMethodInfo = typeof(String).GetMethod("FastAllocateString", bindingFlag);
+
+            HijackHelper.RestoreUnmanagedMethod(MemoryCrawler.FindAllocator(), NewOperatorHijackContext);
+            HijackHelper.RestoreManagedMethod(fastAllocateStringMethodInfo, FastAllocateStringHijackContext);
         }
 
-        private static unsafe MigrationResult MigrateInstruction(IntPtr src, IntPtr dst, Int32 minimumCount)
+        private static unsafe MigrationResult NewOperatorMigrateInstruction(IntPtr src, IntPtr dst, Int32 minimumCount)
         {
             Byte* pSrc = (Byte*)src;
             Byte* pDst = (Byte*)dst;
-                 
+
             // Works on...
             // x86 .NET Framework 4.5 ~ 4.8
             if (
@@ -103,6 +118,10 @@ namespace MemTrick.Test.Infra
                 throw new NotImplementedException();
             }
         }
+        private unsafe static MigrationResult FastAllocateStringMigrateInstruction(IntPtr src, IntPtr dst, int minimumCount)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Starts NoAlloc region. 
@@ -121,7 +140,7 @@ namespace MemTrick.Test.Infra
             IsNoAlloc = false;
         }
 
-        private static Object Hook(IntPtr obj)
+        private static Object NewOperatorHook(IntPtr mt)
         {
             if (IsNoAlloc)
             {
@@ -131,7 +150,7 @@ namespace MemTrick.Test.Infra
                     Thread curr = Thread.CurrentThread;
 
                     throw new MemoryRestrictorException(
-                        $"Tried to allocate in NoAlloc region. Thread: ({curr.Name}, #{curr.ManagedThreadId}), MT: {obj.ToInt64():X}");
+                        $"Tried to allocate in NoAlloc region. Thread: ({curr.Name}, #{curr.ManagedThreadId}), MT: {mt.ToInt64():X}");
                 }
                 finally
                 {
@@ -139,7 +158,27 @@ namespace MemTrick.Test.Infra
                 }
             }
 
-            return HijackContext.Funclet.Invoke(obj);
+            return NewOperatorHijackContext.Funclet.Invoke(mt);
+        }
+        private static String FastAllocateStringHook(Int32 length)
+        {
+            if (IsNoAlloc)
+            {
+                try
+                {
+                    IsNoAlloc = false;
+                    Thread curr = Thread.CurrentThread;
+
+                    throw new MemoryRestrictorException(
+                        $"Tried to allocate new string with length {length}. Thread: ({curr.Name}, #{curr.ManagedThreadId})");
+                }
+                finally
+                {
+                    IsNoAlloc = true;
+                }
+            }
+
+            return FastAllocateStringHijackContext.Funclet.Invoke(length);
         }
     }
 }

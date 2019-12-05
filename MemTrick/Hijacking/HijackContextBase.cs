@@ -37,6 +37,10 @@ namespace MemTrick.Hijacking
             internal set;
         }
 
+#if DEBUG
+        private StackTrace st = new StackTrace(true);
+#endif
+
         public delegate MigrationResult MigrationInstructionDelegate(IntPtr src, IntPtr dst, Int32 minimumCount);
         public MigrationInstructionDelegate MigrateInstruction;
 
@@ -55,7 +59,7 @@ namespace MemTrick.Hijacking
         ~HijackContextBase()
         {
 #if DEBUG
-            Environment.FailFast(".dtor of HijackContextBase has invoked!");
+            Console.WriteLine(".dtor of HijackContextBase has invoked!");
 #endif
 
             Dispose(false);

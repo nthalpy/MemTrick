@@ -12,7 +12,15 @@ namespace MemTrick.Test
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext tc)
         {
-            MemoryRestrictor.Hijack();
+            try
+            {
+                MemoryRestrictor.Hijack();
+            }
+            catch
+            {
+                MemoryRestrictor.Restore();
+                throw;
+            }
         }
 
         [AssemblyCleanup]
