@@ -1,6 +1,6 @@
 ﻿namespace MemTrick.Hijacking
 {
-    internal struct MigrationResult
+    public struct MigrationResult
     {
         public readonly int SrcOffset;
         public readonly int DstOffset;
