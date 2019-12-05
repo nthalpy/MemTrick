@@ -50,6 +50,10 @@ namespace MemTrick.Hijacking
 
             InsertJump(target, hook);
             ((Byte*)target)[result.SrcOffset - 1] = 0x58; // pop rax
+
+            Kernel32.VirtualProtectEx(
+                Process.GetCurrentProcess().Handle, (IntPtr)target, (UIntPtr)result.SrcOffset,
+                originalProtection, out _);
         }
 
         public static unsafe void RestoreManagedMethod(MethodInfo target, HijackContextBase context)
@@ -66,6 +70,10 @@ namespace MemTrick.Hijacking
         }
         public static unsafe void RestoreUnmanagedMethod(void* target, HijackContextBase context)
         {
+            Kernel32.VirtualProtectEx(
+                Process.GetCurrentProcess().Handle, (IntPtr)target, (UIntPtr)context.ReplacedByteCount,
+                Kernel32.PageProtection.ExecuteReadWrite, out Kernel32.PageProtection originalProtection);
+
             if (context.IsDisposed)
                 throw new ObjectDisposedException("context is already disposed. Is method already restored?");
 
@@ -73,6 +81,10 @@ namespace MemTrick.Hijacking
                 ((Byte*)target)[idx] = context.Backup[idx];
 
             context.Dispose();
+
+            Kernel32.VirtualProtectEx(
+                Process.GetCurrentProcess().Handle, (IntPtr)target, (UIntPtr)context.ReplacedByteCount,
+                originalProtection, out _);
         }
 
         // Note:
