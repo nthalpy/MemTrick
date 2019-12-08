@@ -30,11 +30,11 @@ namespace MemTrick.Test.Infra
             MethodInfo newOperatorHook = typeof(MemoryRestrictor).GetMethod(nameof(NewOperatorHook), bindingFlag);
             HijackHelper.HijackUnmanagedMethod(MemoryCrawler.FindAllocator(), newOperatorHook, NewOperatorHijackContext);
 
-            //FastAllocateStringHijackContext = new HijackFuncContext<Int32, String>();
-            //FastAllocateStringHijackContext.MigrateInstruction += FastAllocateStringMigrateInstruction;
-            //MethodInfo fastAllocateStringHook = typeof(MemoryRestrictor).GetMethod(nameof(FastAllocateStringHook), bindingFlag);
-            //MethodInfo fastAllocateStringMethodInfo = typeof(String).GetMethod("FastAllocateString", bindingFlag);
-            //HijackHelper.HijackManagedMethod(fastAllocateStringMethodInfo, fastAllocateStringHook, FastAllocateStringHijackContext);
+            FastAllocateStringHijackContext = new HijackFuncContext<Int32, String>();
+            FastAllocateStringHijackContext.MigrateInstruction += FastAllocateStringMigrateInstruction;
+            MethodInfo fastAllocateStringHook = typeof(MemoryRestrictor).GetMethod(nameof(FastAllocateStringHook), bindingFlag);
+            MethodInfo fastAllocateStringMethodInfo = typeof(String).GetMethod("FastAllocateString", bindingFlag);
+            HijackHelper.HijackManagedMethod(fastAllocateStringMethodInfo, fastAllocateStringHook, FastAllocateStringHijackContext);
         }
 
 
@@ -120,7 +120,51 @@ namespace MemTrick.Test.Infra
         }
         private unsafe static MigrationResult FastAllocateStringMigrateInstruction(IntPtr src, IntPtr dst, int minimumCount)
         {
-            throw new NotImplementedException();
+            Byte* pSrc = (Byte*)src;
+            Byte* pDst = (Byte*)dst;
+
+            // Works on...
+            // x64 .NET Framework 4.5 ~ 4.8
+            // x64 .NET Core 2.0 ~
+            if (
+                pSrc[0] == 0x4C && pSrc[1] == 0x8B && pSrc[2] == 0x0D &&
+                pSrc[7] == 0x81 && pSrc[8] == 0xF9)
+            {
+                int srcOffset = 0;
+                int dstOffset = 0;
+
+                void* location = pSrc + *(Int32*)(pSrc + 3) + 7;
+                pDst[0] = 0x49;
+                pDst[1] = 0xB9;
+                *(void**)(pDst + 2) = location;
+                pDst[10] = 0x4D;
+                pDst[11] = 0x8B;
+                pDst[12] = 0x09;
+
+                srcOffset += 7;
+                dstOffset += 13;
+
+                RawMemoryAllocator.MemCpy(pDst + dstOffset, pSrc + srcOffset, 6);
+                srcOffset += 6;
+                dstOffset += 6;
+
+                return new MigrationResult(srcOffset, dstOffset);
+            }
+            // Works on...
+            // x86 .NET Framework 4.5 ~ 4.8
+            else if (
+                pSrc[0] == 0x51 &&
+                pSrc[1] == 0x8B && pSrc[2] == 0xC1 &&
+                pSrc[3] == 0x8B && pSrc[4] == 0x0D &&
+                pSrc[9] == 0x81 && pSrc[10] == 0xF8)
+            {
+                RawMemoryAllocator.MemCpy(pDst, pSrc, 15);
+                return new MigrationResult(15, 15);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         /// <summary>

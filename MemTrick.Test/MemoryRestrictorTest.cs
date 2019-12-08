@@ -81,7 +81,6 @@ namespace MemTrick.Test
         }
 
         [TestMethod]
-        [Ignore]
         [ExpectedException(typeof(MemoryRestrictorException))]
         // TODO: Make this test pass by hijacking String.FastAllocateString method.
         public void ThrowOnStringConcatenation()
