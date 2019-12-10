@@ -59,7 +59,7 @@ namespace MemTrick.Hijacking
         ~HijackContextBase()
         {
 #if DEBUG
-            Console.WriteLine(".dtor of HijackContextBase has invoked!");
+            Environment.FailFast(".dtor of HijackContextBase has invoked!");
 #endif
 
             Dispose(false);

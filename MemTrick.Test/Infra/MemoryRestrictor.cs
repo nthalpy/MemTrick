@@ -25,17 +25,34 @@ namespace MemTrick.Test.Infra
         {
             BindingFlags bindingFlag = BindingFlags.NonPublic | BindingFlags.Static;
 
-            NewOperatorHijackContext = new HijackFuncContext<IntPtr, Object>();
-            NewOperatorHijackContext.MigrateInstruction += NewOperatorMigrateInstruction;
-            MethodInfo newOperatorHook = typeof(MemoryRestrictor).GetMethod(nameof(NewOperatorHook), bindingFlag);
-            HijackHelper.HijackUnmanagedMethod(MemoryCrawler.FindAllocator(), newOperatorHook, NewOperatorHijackContext);
+            try
+            {
+                NewOperatorHijackContext = new HijackFuncContext<IntPtr, Object>();
+                NewOperatorHijackContext.MigrateInstruction += NewOperatorMigrateInstruction;
+                MethodInfo newOperatorHook = typeof(MemoryRestrictor).GetMethod(nameof(NewOperatorHook), bindingFlag);
+                HijackHelper.HijackUnmanagedMethod(MemoryCrawler.FindAllocator(), newOperatorHook, NewOperatorHijackContext);
+            }
+            catch
+            {
+                NewOperatorHijackContext.Dispose();
+                NewOperatorHijackContext = null;
+                throw;
+            }
 
-            FastAllocateStringHijackContext = new HijackFuncContext<Int32, String>();
-            FastAllocateStringHijackContext.MigrateInstruction += FastAllocateStringMigrateInstruction;
-            MethodInfo fastAllocateStringHook = typeof(MemoryRestrictor).GetMethod(nameof(FastAllocateStringHook), bindingFlag);
-            MethodInfo fastAllocateStringMethodInfo = typeof(String).GetMethod("FastAllocateString", bindingFlag);
-            HijackHelper.HijackManagedMethod(fastAllocateStringMethodInfo, fastAllocateStringHook, FastAllocateStringHijackContext);
-        }
+            try
+            {
+                FastAllocateStringHijackContext = new HijackFuncContext<Int32, String>();
+                FastAllocateStringHijackContext.MigrateInstruction += FastAllocateStringMigrateInstruction;
+                MethodInfo fastAllocateStringHook = typeof(MemoryRestrictor).GetMethod(nameof(FastAllocateStringHook), bindingFlag);
+                MethodInfo fastAllocateStringMethodInfo = typeof(String).GetMethod("FastAllocateString", bindingFlag);
+                HijackHelper.HijackManagedMethod(fastAllocateStringMethodInfo, fastAllocateStringHook, FastAllocateStringHijackContext);
+            }
+            catch
+            {
+                FastAllocateStringHijackContext.Dispose();
+                FastAllocateStringHijackContext = null;
+            }
+            }
 
 
         /// <summary>
@@ -46,7 +63,10 @@ namespace MemTrick.Test.Infra
             BindingFlags bindingFlag = BindingFlags.NonPublic | BindingFlags.Static;
             MethodInfo fastAllocateStringMethodInfo = typeof(String).GetMethod("FastAllocateString", bindingFlag);
 
+            if (NewOperatorHijackContext != null)
             HijackHelper.RestoreUnmanagedMethod(MemoryCrawler.FindAllocator(), NewOperatorHijackContext);
+            
+            if (FastAllocateStringHijackContext != null)
             HijackHelper.RestoreManagedMethod(fastAllocateStringMethodInfo, FastAllocateStringHijackContext);
         }
 
