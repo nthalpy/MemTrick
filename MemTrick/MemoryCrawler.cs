@@ -69,5 +69,13 @@ namespace MemTrick
             // hlpDynamicFuncTable[3]: CORINFO_HELP_NEWSFAST
             return hlpDynamicFuncTable[3];
         }
+        public static void* FindBox()
+        {
+            if (DacTable == null)
+                InitializeDac();
+
+            void** hlpDynamicFuncTable = (void**)((Byte*)BaseAddress + DacTable[8]);
+            return hlpDynamicFuncTable[8];
+        }
     }
 }

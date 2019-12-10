@@ -17,12 +17,15 @@ namespace MemTrick.Test.Infra
 
         private static HijackFuncContext<IntPtr, Object> NewOperatorHijackContext;
         private static HijackFuncContext<Int32, String> FastAllocateStringHijackContext;
+        private static HijackFuncContext<IntPtr, IntPtr, Object> BoxHijackContext;
 
         /// <summary>
         /// Hijacks new operator. Hijacked new operator should be restored before AppDomain being unloaded.
         /// </summary>
         public static unsafe void Hijack()
         {
+            Thread.Sleep(20000);
+
             BindingFlags bindingFlag = BindingFlags.NonPublic | BindingFlags.Static;
 
             try
@@ -52,8 +55,20 @@ namespace MemTrick.Test.Infra
                 FastAllocateStringHijackContext.Dispose();
                 FastAllocateStringHijackContext = null;
             }
-            }
 
+            try
+            {
+                BoxHijackContext = new HijackFuncContext<IntPtr, IntPtr, Object>();
+                BoxHijackContext.MigrateInstruction += BoxMigrateInstruction;
+                MethodInfo boxHook = typeof(MemoryRestrictor).GetMethod(nameof(BoxHook), bindingFlag);
+                HijackHelper.HijackUnmanagedMethod(MemoryCrawler.FindBox(), boxHook, BoxHijackContext);
+            }
+            catch
+            {
+                BoxHijackContext.Dispose();
+                BoxHijackContext = null;
+            }
+        }
 
         /// <summary>
         /// Restores new operator.
@@ -64,10 +79,13 @@ namespace MemTrick.Test.Infra
             MethodInfo fastAllocateStringMethodInfo = typeof(String).GetMethod("FastAllocateString", bindingFlag);
 
             if (NewOperatorHijackContext != null)
-            HijackHelper.RestoreUnmanagedMethod(MemoryCrawler.FindAllocator(), NewOperatorHijackContext);
-            
+                HijackHelper.RestoreUnmanagedMethod(MemoryCrawler.FindAllocator(), NewOperatorHijackContext);
+
             if (FastAllocateStringHijackContext != null)
-            HijackHelper.RestoreManagedMethod(fastAllocateStringMethodInfo, FastAllocateStringHijackContext);
+                HijackHelper.RestoreManagedMethod(fastAllocateStringMethodInfo, FastAllocateStringHijackContext);
+
+            if (BoxHijackContext != null)
+                HijackHelper.RestoreUnmanagedMethod(MemoryCrawler.FindBox(), BoxHijackContext);
         }
 
         private static unsafe MigrationResult NewOperatorMigrateInstruction(IntPtr src, IntPtr dst, Int32 minimumCount)
@@ -186,6 +204,57 @@ namespace MemTrick.Test.Infra
                 throw new NotImplementedException();
             }
         }
+        private unsafe static MigrationResult BoxMigrateInstruction(IntPtr src, IntPtr dst, int minimumCount)
+        {
+            Byte* pSrc = (Byte*)src;
+            Byte* pDst = (Byte*)dst;
+
+            // Works on...
+            // x86 .NET Framework 4.5 ~ 4.8
+            // x64 .NET Framework 4.5 ~ 4.8
+            // x64 .NET Core 2.0 ~
+            if (
+                pSrc[0] == 0x48 && pSrc[1] == 0x8B && pSrc[2] == 0x41 &&
+                pSrc[4] == 0xF7 && pSrc[5] == 0x00 &&
+                pSrc[10] == 0x75 &&
+                pSrc[12] == 0x44 && pSrc[13] == 0x8B && pSrc[14] == 0x41)
+            {
+                int srcOffset = 0;
+                int dstOffset = 0;
+
+                // copy mov rax, qword ptr [rcx+20h]
+                // copy test dword ptr [rax], 4
+                RawMemoryAllocator.MemCpy(pDst, pSrc, 10);
+                srcOffset += 10;
+                dstOffset += 10;
+
+                // copy jne (location) as...
+                void* location = pSrc + srcOffset + *(pSrc + srcOffset + 1) + 2;
+
+                // je eip+0xc
+                // mov rbx, (location)
+                // jmp rbx
+                pDst[dstOffset + 0] = 0x74;
+                pDst[dstOffset + 1] = 0x0C;
+                pDst[dstOffset + 2] = 0x48;
+                pDst[dstOffset + 3] = 0xBB;
+                *(void**)(pDst + dstOffset + 4) = location;
+                pDst[dstOffset + 12] = 0xFF;
+                pDst[dstOffset + 13] = 0xE3;
+
+                srcOffset += 2;
+                dstOffset += 14;
+
+                RawMemoryAllocator.MemCpy(pDst + dstOffset, pSrc + srcOffset, 4);
+                srcOffset += 4;
+                dstOffset += 4;
+                return new MigrationResult(srcOffset, dstOffset);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         /// <summary>
         /// Starts NoAlloc region. 
@@ -243,6 +312,27 @@ namespace MemTrick.Test.Infra
             }
 
             return FastAllocateStringHijackContext.Funclet.Invoke(length);
+        }
+        private static Object BoxHook(IntPtr type, IntPtr unboxedData)
+        {
+            if (IsNoAlloc)
+            {
+                try
+                {
+                    IsNoAlloc = false;
+                    Thread curr = Thread.CurrentThread;
+
+                    // TODO: Leave some diagnostics informations.
+                    throw new MemoryRestrictorException(
+                        $"Tried to box something. Thread: ({curr.Name}, ${curr.ManagedThreadId})");
+                }
+                finally
+                {
+                    IsNoAlloc = true;
+                }
+            }
+
+            return BoxHijackContext.Funclet.Invoke(type, unboxedData);
         }
     }
 }

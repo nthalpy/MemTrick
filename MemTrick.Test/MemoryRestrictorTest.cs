@@ -63,26 +63,21 @@ namespace MemTrick.Test
         }
 
         [TestMethod]
-        [Ignore]
         [ExpectedException(typeof(MemoryRestrictorException))]
-        // TODO: Make this test pass by hijacking method which assigned to
-        // hlpDynamicFuncTable[CORINFO_HELP_BOX].
         public void ThrowOnBoxing()
         {
             using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
             {
                 int intValue = 0x123123;
+                Object boxed = (Object)intValue;
 
                 MemoryRestrictor.EndNoAlloc();
-                // Invoking Object.GetHashCode will box 'intValue' variable first,
-                // Then invoke it with.
-                Assert.IsTrue(intValue.GetHashCode() == intValue);
+                Assert.IsTrue(boxed.GetHashCode() == intValue);
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(MemoryRestrictorException))]
-        // TODO: Make this test pass by hijacking String.FastAllocateString method.
         public void ThrowOnStringConcatenation()
         {
             using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
