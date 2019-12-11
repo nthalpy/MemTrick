@@ -58,24 +58,14 @@ namespace MemTrick
                 throw new NotSupportedException("Unable to find DAC Table!");
         }
 
-        public static void* FindAllocator()
+        public static void* RetrieveMethod(DynamicJitHelperEnum e)
         {
             if (DacTable == null)
                 InitializeDac();
 
             // DacTable[8]: clr!hlpDynamicFuncTable
             void** hlpDynamicFuncTable = (void**)((Byte*)BaseAddress + DacTable[8]);
-
-            // hlpDynamicFuncTable[3]: CORINFO_HELP_NEWSFAST
-            return hlpDynamicFuncTable[3];
-        }
-        public static void* FindBox()
-        {
-            if (DacTable == null)
-                InitializeDac();
-
-            void** hlpDynamicFuncTable = (void**)((Byte*)BaseAddress + DacTable[8]);
-            return hlpDynamicFuncTable[8];
+            return hlpDynamicFuncTable[(int)e];
         }
     }
 }

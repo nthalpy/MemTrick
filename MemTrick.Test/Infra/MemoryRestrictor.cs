@@ -33,7 +33,7 @@ namespace MemTrick.Test.Infra
                 NewOperatorHijackContext = new HijackFuncContext<IntPtr, Object>();
                 NewOperatorHijackContext.MigrateInstruction += NewOperatorMigrateInstruction;
                 MethodInfo newOperatorHook = typeof(MemoryRestrictor).GetMethod(nameof(NewOperatorHook), bindingFlag);
-                HijackHelper.HijackUnmanagedMethod(MemoryCrawler.FindAllocator(), newOperatorHook, NewOperatorHijackContext);
+                HijackHelper.HijackUnmanagedMethod(MemoryCrawler.RetrieveMethod(DynamicJitHelperEnum.NewSFast), newOperatorHook, NewOperatorHijackContext);
             }
             catch
             {
@@ -61,7 +61,7 @@ namespace MemTrick.Test.Infra
                 BoxHijackContext = new HijackFuncContext<IntPtr, IntPtr, Object>();
                 BoxHijackContext.MigrateInstruction += BoxMigrateInstruction;
                 MethodInfo boxHook = typeof(MemoryRestrictor).GetMethod(nameof(BoxHook), bindingFlag);
-                HijackHelper.HijackUnmanagedMethod(MemoryCrawler.FindBox(), boxHook, BoxHijackContext);
+                HijackHelper.HijackUnmanagedMethod(MemoryCrawler.RetrieveMethod(DynamicJitHelperEnum.HelpBox), boxHook, BoxHijackContext);
             }
             catch
             {
@@ -79,13 +79,13 @@ namespace MemTrick.Test.Infra
             MethodInfo fastAllocateStringMethodInfo = typeof(String).GetMethod("FastAllocateString", bindingFlag);
 
             if (NewOperatorHijackContext != null)
-                HijackHelper.RestoreUnmanagedMethod(MemoryCrawler.FindAllocator(), NewOperatorHijackContext);
+                HijackHelper.RestoreUnmanagedMethod(MemoryCrawler.RetrieveMethod(DynamicJitHelperEnum.NewSFast), NewOperatorHijackContext);
 
             if (FastAllocateStringHijackContext != null)
                 HijackHelper.RestoreManagedMethod(fastAllocateStringMethodInfo, FastAllocateStringHijackContext);
 
             if (BoxHijackContext != null)
-                HijackHelper.RestoreUnmanagedMethod(MemoryCrawler.FindBox(), BoxHijackContext);
+                HijackHelper.RestoreUnmanagedMethod(MemoryCrawler.RetrieveMethod(DynamicJitHelperEnum.HelpBox), BoxHijackContext);
         }
 
         private static unsafe MigrationResult NewOperatorMigrateInstruction(IntPtr src, IntPtr dst, Int32 minimumCount)
