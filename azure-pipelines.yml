@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 trigger:
-- dev
+- mstestfix
 
 pool:
   vmImage: 'windows-latest'
@@ -34,12 +34,25 @@ steps:
 
 - task: VSTest@2
   inputs:
-    platform: '$(buildPlatform)'
-    testRunTitle: 'Test with Debug configuration'
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: | 
+      '**/MemTrick.Test.CLR.x86/**/*.dll'
+    testRunTitle: 'CLR.x86/Debug'
+    platform: 'x86'
     configuration: 'Debug'
-
 - task: VSTest@2
   inputs:
-    platform: '$(buildPlatform)'
-    testRunTitle: 'Test with Release configuration'
-    configuration: 'Release'
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: | 
+      '**/MemTrick.Test.CLR.x64/**/*.dll'
+    testRunTitle: 'CLR.x64/Debug'
+    platform: 'x64'
+    configuration: 'Debug'
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: | 
+      '**/MemTrick.Test.CoreCLR2.x64/**/*.dll'
+    testRunTitle: 'CoreCLR2.x64/Debug'
+    platform: 'x64'
+    configuration: 'Debug'
