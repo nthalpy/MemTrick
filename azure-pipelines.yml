@@ -10,7 +10,8 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
+  solution: 'MemTrick.sln'
+  buildPlatform: 'Mixed Platform'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -22,7 +23,7 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
-    platform: 'Mixed Platform'
+    platform: '$(buildPlatform)'
     configuration: 'Debug'
 
 - task: VSBuild@1
