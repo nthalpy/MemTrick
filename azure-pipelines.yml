@@ -41,19 +41,3 @@ steps:
     testRunTitle: 'CLR.x64/Debug'
     platform: 'x64'
     configuration: 'Debug'
-- task: VSTest@2
-  inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: | 
-      **/Debug/**/MemTrick.Test.CLR.x86.dll
-    testRunTitle: 'CLR.x86/Debug'
-    platform: 'x86'
-    configuration: 'Debug'
-- task: VSTest@2
-  inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: | 
-      **/Debug/**/MemTrick.Test.CoreCLR2.x64.dll
-    testRunTitle: 'CoreCLR2.x64/Debug'
-    platform: 'x64'
-    configuration: 'Debug'
