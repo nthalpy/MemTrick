@@ -36,8 +36,24 @@ steps:
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: | 
+      **/bin/x86/Debug/**/MemTrick.Test.CLR.x86.dll
+    testRunTitle: 'CLR.x86/Debug'
+    platform: 'x86'
+    configuration: 'Debug'
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: | 
       **/bin/x64/Debug/**/MemTrick.Test.CLR.x64.dll
     testRunTitle: 'CLR.x64/Debug'
+    platform: 'x64'
+    configuration: 'Debug'
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: | 
+      **/bin/x64/Debug/**/MemTrick.Test.CoreCLR.x64.dll
+    testRunTitle: 'CoreCLR.x64/Debug'
     platform: 'x64'
     configuration: 'Debug'
 
@@ -46,6 +62,22 @@ steps:
     testSelector: 'testAssemblies'
     testAssemblyVer2: | 
       **/bin/x86/Debug/**/MemTrick.Test.CLR.x86.dll
-    testRunTitle: 'CLR.x86/Debug'
+    testRunTitle: 'CLR.x86/Release'
     platform: 'x86'
-    configuration: 'Debug'
+    configuration: 'Release'
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: | 
+      **/bin/x64/Debug/**/MemTrick.Test.CLR.x64.dll
+    testRunTitle: 'CLR.x64/Release'
+    platform: 'x64'
+    configuration: 'Release'
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: | 
+      **/bin/x64/Debug/**/MemTrick.Test.CoreCLR.x64.dll
+    testRunTitle: 'CoreCLR.x64/Release'
+    platform: 'x64'
+    configuration: 'Release'
