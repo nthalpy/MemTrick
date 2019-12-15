@@ -24,8 +24,6 @@ namespace MemTrick.Test.Infra
         /// </summary>
         public static unsafe void Hijack()
         {
-            Thread.Sleep(20000);
-
             BindingFlags bindingFlag = BindingFlags.NonPublic | BindingFlags.Static;
 
             try
