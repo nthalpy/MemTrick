@@ -72,7 +72,7 @@ namespace MemTrick.Test
                 Object boxed = (Object)intValue;
 
                 MemoryRestrictor.EndNoAlloc();
-                Assert.IsTrue(boxed.GetHashCode() == intValue);
+                Assert.IsTrue(boxed.ToString() == intValue.ToString());
             }
         }
 
