@@ -36,7 +36,7 @@ steps:
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: | 
-      **/Debug/**/MemTrick.Test.CLR.x64.dll
+      **/bin/Debug/**/MemTrick.Test.CLR.x64.dll
     testRunTitle: 'CLR.x64/Debug'
     platform: 'x64'
     configuration: 'Debug'
@@ -45,7 +45,7 @@ steps:
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: | 
-      **/Debug/**/MemTrick.Test.CLR.x86.dll
+      **/bin/Debug/**/MemTrick.Test.CLR.x86.dll
     testRunTitle: 'CLR.x86/Debug'
     platform: 'x86'
     configuration: 'Debug'
