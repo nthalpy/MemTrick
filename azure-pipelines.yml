@@ -33,6 +33,7 @@ steps:
     configuration: 'Release'
 
 - task: VSTest@2
+  continueOnError: true
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: | 
@@ -41,6 +42,7 @@ steps:
     platform: 'x86'
     configuration: 'Debug'
 - task: VSTest@2
+  continueOnError: true
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: | 
@@ -49,6 +51,7 @@ steps:
     platform: 'x64'
     configuration: 'Debug'
 - task: VSTest@2
+  continueOnError: true
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: | 
@@ -58,6 +61,7 @@ steps:
     configuration: 'Debug'
 
 - task: VSTest@2
+  continueOnError: true
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: | 
@@ -66,6 +70,7 @@ steps:
     platform: 'x86'
     configuration: 'Release'
 - task: VSTest@2
+  continueOnError: true
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: | 
@@ -74,6 +79,7 @@ steps:
     platform: 'x64'
     configuration: 'Release'
 - task: VSTest@2
+  continueOnError: true
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: | 
@@ -81,3 +87,4 @@ steps:
     testRunTitle: 'CoreCLR2.x64/Release'
     platform: 'x64'
     configuration: 'Release'
+
