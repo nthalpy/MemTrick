@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ArrayHolder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Boxing.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BoxingHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DynamicJitHelperEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hijacking\HijackContextBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hijacking\HijackFuncContext.cs" />

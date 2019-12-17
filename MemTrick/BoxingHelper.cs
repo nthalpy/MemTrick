@@ -7,7 +7,7 @@ namespace MemTrick
     /// Boxing helper class.
     /// Supports methods for boxing without managed heap allocation.
     /// </summary>
-    public static class Boxing
+    public static class BoxingHelper
     {
         public unsafe static ObjectRef Box<T>(T val) where T : struct
         {

@@ -14,7 +14,7 @@ namespace MemTrick.Test
             {
                 int val = 0x12345678;
 
-                using (ObjectRef objRef = Boxing.Box(val))
+                using (ObjectRef objRef = BoxingHelper.Box(val))
                 {
                     Object boxed = objRef.GetObject();
 
