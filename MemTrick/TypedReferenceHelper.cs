@@ -32,14 +32,14 @@ namespace MemTrick
         {
             TypedReference tr = __makeref(obj);
 
-            void* pMT= *(void**)((PublicTypedReference*)&tr)->Value;
+            void* pMT = *(void**)((PublicTypedReference*)&tr)->Value;
             return (ObjectHeader*)(((Byte*)pMT) - sizeof(void*));
         }
-        public unsafe static void* StructToPointer<T>(T obj) where T:struct
+        public unsafe static void* StructToPointer<T>(ref T obj) where T : struct
         {
             TypedReference tr = __makeref(obj);
 
-            return *(void**)((PublicTypedReference*)&tr)->Value;
+            return ((PublicTypedReference*)&tr)->Value;
         }
     }
 }

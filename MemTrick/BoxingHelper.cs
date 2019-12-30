@@ -16,7 +16,7 @@ namespace MemTrick
 
             ObjectHeader* objHeader = (ObjectHeader*)RawMemoryAllocator.Allocate(size);
 
-            void* src = TypedReferenceHelper.StructToPointer(val);
+            void* src = TypedReferenceHelper.StructToPointer(ref val);
 
             objHeader->SyncBlock = 0;
             objHeader->MethodTable = mt;
