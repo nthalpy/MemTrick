@@ -14,10 +14,8 @@ namespace MemTrick.Test
             {
                 int val = 0x12345678;
 
-                using (ObjectRef objRef = BoxingHelper.Box(val))
+                using (BoxingHelper.Box(val, out Object boxed))
                 {
-                    Object boxed = objRef.GetObject();
-
                     MemoryRestrictor.EndNoAlloc();
                     Assert.AreEqual(boxed, val);
                 }

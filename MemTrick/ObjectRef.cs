@@ -6,11 +6,11 @@ namespace MemTrick
     /// <summary>
     /// Value type object to retrieve reference type object.
     /// </summary>
-    public unsafe struct ObjectRef : IDisposable
+    internal struct ObjectRef
     {
-        private MethodTable** ptr;
+        private unsafe MethodTable** ptr;
 
-        internal int SyncBlock
+        public unsafe int SyncBlock
         {
             get
             {
@@ -22,7 +22,7 @@ namespace MemTrick
             }
         }
 
-        internal MethodTable* MethodTablePtr
+        public unsafe MethodTable* MethodTablePtr
         {
             get
             {
@@ -34,48 +34,31 @@ namespace MemTrick
             }
         }
 
-        internal void* ClassDataStartPoint
+        public unsafe void* ClassDataStartPoint
         {
             get
             {
                 return ptr + 1;
             }
         }
-        internal void* StructDataStartPoint
-        {
-            get
-            {
-                return ptr;
-            }
-        }
 
-        internal ObjectRef(ObjectHeader* objectHeader)
+        public unsafe ObjectRef(ObjectHeader* objectHeader)
         {
             ptr = (MethodTable**)objectHeader + 1;
         }
 
-        public unsafe Object GetObject()
+        public T AsClassType<T>() where T : class
         {
-            return GetObject<Object>();
-        }
-        public unsafe T GetObject<T>()
-        {
-            MethodTable** p = ptr;
-            PublicTypedReference typedReference = new PublicTypedReference
+            unsafe
             {
-                Value = &p,
-                Type = MethodTable.GetMethodTable<T>(),
-            };
+                MethodTable** p = ptr;
+                PublicTypedReference typedReference = new PublicTypedReference
+                {
+                    Value = &p,
+                    Type = MethodTable.GetMethodTable<T>(),
+                };
 
-            return __refvalue(*(TypedReference*)&typedReference, T);
-        }
-
-        public void Dispose()
-        {
-            if (ptr != null)
-            {
-                RawMemoryAllocator.Free(ptr - 1);
-                ptr = null;
+                return __refvalue(*(TypedReference*)&typedReference, T);
             }
         }
     }

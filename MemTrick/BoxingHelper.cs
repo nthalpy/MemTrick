@@ -9,23 +9,23 @@ namespace MemTrick
     /// </summary>
     public static class BoxingHelper
     {
-        public unsafe static ObjectRef Box<T>(T val) where T : struct
+        public unsafe static UnmanagedHeapDisposeHandle Box<T>(T val, out Object boxed) where T : struct
         {
             MethodTable* mt = MethodTable.GetMethodTable<T>();
             int size = mt->BaseSize;
 
-            ObjectRef objRef = new ObjectRef((ObjectHeader*)RawMemoryAllocator.Allocate(size));
+            void* p = RawMemoryAllocator.Allocate(size);
+            ObjectRef objRef = new ObjectRef((ObjectHeader*)p);
 
             TypedReference tr = __makeref(val);
             void* src = *(IntPtr**)&tr;
 
             objRef.SyncBlock = 0;
             objRef.MethodTablePtr = mt;
-            void* dst = objRef.ClassDataStartPoint;
+            RawMemoryAllocator.MemCpy(objRef.ClassDataStartPoint, src, mt->DataSize);
 
-            RawMemoryAllocator.MemCpy(dst, src, mt->DataSize);
-
-            return objRef;
+            boxed = objRef.AsClassType<Object>();
+            return new UnmanagedHeapDisposeHandle(p); 
         }
     }
 }
