@@ -23,14 +23,8 @@ namespace MemTrick
             objHeader->MethodTable = pArrayMT;
             szArrayHeader->NumComponents = size;
 
-            void* objPtr = &(objHeader->MethodTable);
-            PublicTypedReference tr = new PublicTypedReference
-            {
-                Value = &objPtr,
-                Type = typeof(T[]).TypeHandle.Value.ToPointer(),
-            };
-
-            return new UnmanagedSZArray<T>(__refvalue(*(TypedReference*)&tr, T[]), addr);
+            T[] arr = TypedReferenceHelper.PointerToObject<T[]>(objHeader);
+            return new UnmanagedSZArray<T>(arr, addr);
         }
 
         public readonly T[] Array;

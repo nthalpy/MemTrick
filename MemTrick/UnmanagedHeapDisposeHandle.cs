@@ -1,23 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MemTrick
 {
+    /// <summary>
+    /// Handle for disposing unmanaged heap memory. Use with using clause.
+    /// </summary>
     public struct UnmanagedHeapDisposeHandle : IDisposable
     {
-        private IntPtr p;
+        private IntPtr objHeader;
 
-        internal unsafe UnmanagedHeapDisposeHandle(void* p)
+        internal unsafe UnmanagedHeapDisposeHandle(void* objHeader)
         {
-            this.p = (IntPtr)p;
+            this.objHeader = (IntPtr)objHeader;
         }
 
         public void Dispose()
         {
             unsafe
             {
-                RawMemoryAllocator.Free((void*)p);
+                RawMemoryAllocator.Free((void*)objHeader);
             }
         }
     }

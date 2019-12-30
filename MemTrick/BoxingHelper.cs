@@ -14,18 +14,16 @@ namespace MemTrick
             MethodTable* mt = MethodTable.GetMethodTable<T>();
             int size = mt->BaseSize;
 
-            void* p = RawMemoryAllocator.Allocate(size);
-            ObjectRef objRef = new ObjectRef((ObjectHeader*)p);
+            ObjectHeader* objHeader = (ObjectHeader*)RawMemoryAllocator.Allocate(size);
 
-            TypedReference tr = __makeref(val);
-            void* src = *(IntPtr**)&tr;
+            void* src = TypedReferenceHelper.StructToPointer(val);
 
-            objRef.SyncBlock = 0;
-            objRef.MethodTablePtr = mt;
-            RawMemoryAllocator.MemCpy(objRef.ClassDataStartPoint, src, mt->DataSize);
+            objHeader->SyncBlock = 0;
+            objHeader->MethodTable = mt;
+            RawMemoryAllocator.MemCpy(objHeader + 1, src, mt->DataSize);
 
-            boxed = objRef.AsClassType<Object>();
-            return new UnmanagedHeapDisposeHandle(p); 
+            boxed = TypedReferenceHelper.PointerToObject<Object>(objHeader);
+            return new UnmanagedHeapDisposeHandle(objHeader);
         }
     }
 }

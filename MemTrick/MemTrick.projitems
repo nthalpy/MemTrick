@@ -20,8 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Kernel32.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MemoryCrawler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MemoryLeakException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ObjectRef.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PublicTypedReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TypedReferenceHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RawMemoryAllocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\MethodTable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ObjectHeader.cs" />
