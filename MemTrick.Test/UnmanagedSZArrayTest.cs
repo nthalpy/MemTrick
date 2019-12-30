@@ -18,7 +18,7 @@ namespace MemTrick.Test
             for (int idx = 0; idx < original.Length; idx++)
                 original[idx] = rd.Next();
 
-            using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
+            using (MemoryRestrictor.StartNoAlloc())
             using (UnmanagedSZArray<int> intSZArray = UnmanagedSZArray<int>.Create(size))
             {
                 int[] arr = intSZArray.Array;

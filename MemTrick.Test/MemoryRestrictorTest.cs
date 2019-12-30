@@ -33,7 +33,7 @@ namespace MemTrick.Test
         [ExpectedException(typeof(MemoryRestrictorException))]
         public void ThrowOnAllocation()
         {
-            using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
+            using (MemoryRestrictor.StartNoAlloc())
             {
                 Object obj = new Object();
 
@@ -49,7 +49,7 @@ namespace MemTrick.Test
         {
             int[] array = new int[] { 1, 2, 3, 4 };
 
-            using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
+            using (MemoryRestrictor.StartNoAlloc())
             {
                 // Enumerable.Sum(this IEnumerable`1) extension method internally uses 
                 // IEnumerable`1.GetEnumerator, and invoking IEnumerable`1.GetEnumerator
@@ -66,7 +66,7 @@ namespace MemTrick.Test
         [ExpectedException(typeof(MemoryRestrictorException))]
         public void ThrowOnBoxing()
         {
-            using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
+            using (MemoryRestrictor.StartNoAlloc())
             {
                 int intValue = 0x123123;
                 Object boxed = (Object)intValue;
@@ -80,7 +80,7 @@ namespace MemTrick.Test
         [ExpectedException(typeof(MemoryRestrictorException))]
         public void ThrowOnStringConcatenation()
         {
-            using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
+            using (MemoryRestrictor.StartNoAlloc())
             {
                 String s = String.Concat("A", "B");
 

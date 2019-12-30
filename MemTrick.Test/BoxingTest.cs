@@ -10,14 +10,14 @@ namespace MemTrick.Test
         [TestMethod]
         public void Int32BoxingTest()
         {
-            using (NoAllocFinalizer _ = MemoryRestrictor.StartNoAlloc())
+            using (MemoryRestrictor.StartNoAlloc())
             {
-                int val = 0x12345678;
+                int val = 12345678;
 
                 using (BoxingHelper.Box(val, out Object boxed))
                 {
                     MemoryRestrictor.EndNoAlloc();
-                    Assert.AreEqual(boxed, val);
+                    Assert.AreEqual(val, boxed);
                 }
             }
         }
