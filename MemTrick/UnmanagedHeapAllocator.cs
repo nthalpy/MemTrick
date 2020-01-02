@@ -5,20 +5,34 @@ namespace MemTrick
 {
     public static class UnmanagedHeapAllocator
     {
-        public static UnmanagedHeapDisposeHandle AllocateClass<T>(out T result) where T : class
+        /// <summary>
+        /// Similar with FormatterServices.GetUninitializedObject. Allocate and return zeroed T-typed object.
+        /// </summary>
+        public static UnmanagedHeapDisposeHandle UninitializedAllocation<T>(out T result) where T : class
+        {
+            UnmanagedHeapDisposeHandle handle = UninitializedAllocation(typeof(T), out Object obj);
+            result = obj as T;
+
+            return handle;
+        }
+
+        /// <summary>
+        /// Similar with FormatterServices.GetUninitializedObject. Allocate and return zeroed T-typed object.
+        /// </summary>
+        public static UnmanagedHeapDisposeHandle UninitializedAllocation(Type t, out Object result)
         {
             unsafe
             {
-                MethodTable* mt = MethodTable.GetMethodTable<T>();
+                MethodTable* mt = MethodTable.GetMethodTable(t);
                 int size = mt->BaseSize;
 
                 ObjectHeader* objHeader = (ObjectHeader*)RawMemoryAllocator.Allocate(size);
 
                 objHeader->SyncBlock = 0;
                 objHeader->MethodTable = mt;
-                RawMemoryAllocator.FillMemory(objHeader+1, 0, size);
+                RawMemoryAllocator.FillMemory(objHeader + 1, 0, size);
 
-                result = TypedReferenceHelper.PointerToObject<T>(objHeader);
+                result = TypedReferenceHelper.PointerToObject<Object>(objHeader);
                 return new UnmanagedHeapDisposeHandle(objHeader);
             }
         }
