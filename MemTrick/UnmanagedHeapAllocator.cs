@@ -30,7 +30,7 @@ namespace MemTrick
 
                 objHeader->SyncBlock = 0;
                 objHeader->MethodTable = mt;
-                RawMemoryAllocator.FillMemory(objHeader + 1, 0, size);
+                RawMemoryAllocator.FillMemory(objHeader + 1, 0, size - sizeof(ObjectHeader));
 
                 result = TypedReferenceHelper.PointerToObject<Object>(objHeader);
                 return new UnmanagedHeapDisposeHandle(objHeader);
