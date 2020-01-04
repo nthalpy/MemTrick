@@ -1,5 +1,6 @@
 ﻿using MemTrick.RumtimeSpecific;
 using System;
+using System.Reflection;
 
 namespace MemTrick
 {
@@ -35,6 +36,48 @@ namespace MemTrick
                 result = TypedReferenceHelper.PointerToObject<Object>(objHeader);
                 return new UnmanagedHeapDisposeHandle(objHeader);
             }
+        }
+
+        /// <summary>
+        /// Similar with new T();
+        /// </summary>
+        public static UnmanagedHeapDisposeHandle Allocate<T>(out T result) where T : class
+        {
+            UnmanagedHeapDisposeHandle handle = UninitializedAllocation<T>(out result);
+
+            unsafe
+            {
+                ConstructorInfo ci = typeof(T).GetConstructor(
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance,
+                    null,
+                    CallingConventions.Any,
+                    Type.EmptyTypes,
+                    null);
+                ArbitaryMethodInvoker.InvokeAction(ci.MethodHandle.GetFunctionPointer(), result);
+            }
+
+            return handle;
+        }
+
+        /// <summary>
+        /// Similar with new T(arg0);
+        /// </summary>
+        public static UnmanagedHeapDisposeHandle Allocate<T, TArg0>(out T result, TArg0 arg0) where T : class
+        {
+            UnmanagedHeapDisposeHandle handle = UninitializedAllocation<T>(out result);
+
+            unsafe
+            {
+                ConstructorInfo ci = typeof(T).GetConstructor(
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance,
+                    null,
+                    CallingConventions.Any,
+                    new Type[] { typeof(TArg0) },
+                    null);
+                ArbitaryMethodInvoker.InvokeAction(ci.MethodHandle.GetFunctionPointer(), result, arg0);
+            }
+
+            return handle;
         }
 
         public static UnmanagedHeapDisposeHandle Box<T>(T val, out Object boxed) where T : struct

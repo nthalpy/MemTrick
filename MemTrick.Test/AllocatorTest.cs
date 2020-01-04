@@ -19,6 +19,10 @@ namespace MemTrick.Test
             {
                 IntField = DefaultConstructorIntField;
             }
+            private DummyClass(int intField)
+            {
+                IntField = intField;
+            }
 
             public override int GetHashCode()
             {
@@ -40,13 +44,41 @@ namespace MemTrick.Test
 
             using (MemoryRestrictor.StartNoAlloc())
             {
-                using (UnmanagedHeapAllocator.UninitializedAllocation<DummyClass>(out DummyClass uheapObj))
+                using (UnmanagedHeapAllocator.UninitializedAllocation(out DummyClass uheapObj))
                 {
                     MemoryRestrictor.EndNoAlloc();
 
                     Assert.AreEqual(DummyClass.UninitializedIntField, uheapObj.IntField);
                     Assert.AreEqual(original, uheapObj);
                 }
+            }
+        }
+
+        [TestMethod]
+        // TODO: Fix this to make no memory allocations.
+        public void PublicConstructorCallTest()
+        {
+            //using (MemoryRestrictor.StartNoAlloc())
+            using (UnmanagedHeapAllocator.Allocate(out DummyClass uheapObj))
+            {
+                //MemoryRestrictor.EndNoAlloc();
+
+                Assert.AreEqual(DummyClass.DefaultConstructorIntField, uheapObj.IntField);
+            }
+        }
+
+        [TestMethod]
+        // TODO: Fix this to make no memory allocations.
+        public void PrivateConstructorCallTest()
+        {
+            const int expectedIntFieldValue = 0x34;
+
+            //using (MemoryRestrictor.StartNoAlloc())
+            using (UnmanagedHeapAllocator.Allocate(out DummyClass uheapObj, expectedIntFieldValue))
+            {
+                //MemoryRestrictor.EndNoAlloc();
+
+                Assert.AreEqual(expectedIntFieldValue, uheapObj.IntField);
             }
         }
     }

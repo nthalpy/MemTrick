@@ -16,7 +16,7 @@ namespace MemTrick
             public void* Type;
         }
 
-        public unsafe static T PointerToObject<T>(ObjectHeader* objectHeader)
+        public unsafe static T PointerToObject<T>(ObjectHeader* objectHeader) where T : class
         {
             MethodTable** ppMT = &(objectHeader->MethodTable);
             PublicTypedReference typedReference = new PublicTypedReference

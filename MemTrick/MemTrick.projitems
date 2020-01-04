@@ -9,6 +9,7 @@
     <Import_RootNamespace>MemTrick</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ArbitaryMethodInvoker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ArrayHolder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UnmanagedHeapAllocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UnmanagedHeapDisposeHandle.cs" />
