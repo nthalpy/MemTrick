@@ -1,7 +1,6 @@
-﻿using MemTrick.RumtimeSpecific;
-using System;
+﻿using System;
 
-namespace MemTrick
+namespace MemTrick.RumtimeSpecific
 {
     internal static class ArbitaryMethodInvoker
     {
