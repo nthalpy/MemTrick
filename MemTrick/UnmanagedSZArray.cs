@@ -13,7 +13,7 @@ namespace MemTrick
         public static UnmanagedSZArray<T> Create(int size)
         {
             MethodTable* pElementMT = MethodTable.GetMethodTable<T>();
-            MethodTable* pArrayMT = MethodTable.GetArrayMethodTable<T>();
+            MethodTable* pArrayMT = MethodTable.GetMethodTable<T[]>();
             int elementSize = pElementMT->IsClass ? sizeof(IntPtr) : pElementMT->DataSize;
 
             void* addr = RawMemoryAllocator.Allocate(sizeof(ObjectHeader) + sizeof(SZArrayHeader) + elementSize * size);

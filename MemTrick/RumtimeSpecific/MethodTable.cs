@@ -15,15 +15,8 @@ namespace MemTrick.RumtimeSpecific
         }
         public unsafe static MethodTable* GetMethodTable(Type t)
         {
-            return (MethodTable*)t.TypeHandle.Value;
-        }
-
-        public unsafe static MethodTable* GetArrayMethodTable<TElem>()
-        {
-            TElem[] emptyArray = ArrayHolder<TElem>.Empty;
-            TypedReference tr = __makeref(emptyArray);
-
-            return ***(MethodTable****)&tr;
+            TypeHandle typeHandle = new TypeHandle { TAddr = t.TypeHandle.Value };
+            return typeHandle.GetMethodTable();
         }
 
         [FieldOffset(0)]

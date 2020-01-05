@@ -22,7 +22,7 @@ namespace MemTrick
             PublicTypedReference typedReference = new PublicTypedReference
             {
                 Value = &ppMT,
-                Type = MethodTable.GetMethodTable<T>(),
+                Type = (void*)typeof(T).TypeHandle.Value,
             };
 
             return __refvalue(*(TypedReference*)&typedReference, T);

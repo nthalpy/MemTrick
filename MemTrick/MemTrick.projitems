@@ -11,6 +11,10 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ArbitaryMethodInvoker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ArrayHolder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\CorElementType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ParamTypeDesc.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\TypeDesc.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\TypeHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UnmanagedHeapAllocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UnmanagedHeapDisposeHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DynamicJitHelperEnum.cs" />
