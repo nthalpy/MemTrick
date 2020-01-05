@@ -8,13 +8,14 @@ namespace MemTrick.RumtimeSpecific
     {
         public TypeDesc Parent;
 
-        public MethodTable* TemplateMT;
+        private UInt64 templateMT;
         public TypeHandle Arg;
-        public IntPtr ExposedClassObject;
+        private IntPtr exposedClassObject;
 
         internal MethodTable* GetTemplateMethodTableInternal()
         {
-            return TemplateMT;
+            fixed (ParamTypeDesc* pThis = &this)
+                return (MethodTable*)((Byte*)&pThis->templateMT + templateMT);
         }
     }
 }
