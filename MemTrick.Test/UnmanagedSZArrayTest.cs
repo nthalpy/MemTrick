@@ -19,10 +19,8 @@ namespace MemTrick.Test
                 original[idx] = rd.Next();
 
             using (MemoryRestrictor.StartNoAlloc())
-            using (UnmanagedSZArray<int> intSZArray = UnmanagedSZArray<int>.Create(size))
+            using (UnmanagedHeapAllocator.AllocateSZArray(size, out int[] arr))
             {
-                int[] arr = intSZArray.Array;
-
                 for (int idx = 0; idx < arr.Length; idx++)
                     arr[idx] = original[idx];
 

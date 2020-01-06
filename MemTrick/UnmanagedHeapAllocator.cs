@@ -156,6 +156,23 @@ namespace MemTrick
         }
         #endregion
 
+        public static UnmanagedHeapDisposeHandle AllocateSZArray<T>(int size, out T[] array)
+        {
+            MethodTable* pElementMT = MethodTable.GetMethodTable<T>();
+            MethodTable* pArrayMT = MethodTable.GetMethodTable<T[]>();
+            int elementSize = pElementMT->IsClass ? sizeof(IntPtr) : pElementMT->DataSize;
+
+            void* addr = RawMemoryAllocator.Allocate(sizeof(ObjectHeader) + sizeof(SZArrayHeader) + elementSize * size);
+            ObjectHeader* objHeader = (ObjectHeader*)addr;
+            SZArrayHeader* szArrayHeader = (SZArrayHeader*)(objHeader + 1);
+
+            objHeader->MethodTable = pArrayMT;
+            szArrayHeader->NumComponents = size;
+
+            array = TypedReferenceHelper.PointerToObject<T[]>(objHeader);
+            return new UnmanagedHeapDisposeHandle(objHeader);
+        }
+
         public static UnmanagedHeapDisposeHandle Box<T>(T val, out Object boxed) where T : struct
         {
             MethodTable* mt = MethodTable.GetMethodTable<T>();

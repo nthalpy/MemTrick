@@ -29,6 +29,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\MethodTable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ObjectHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\SZArrayHeader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UnmanagedSZArray.cs" />
   </ItemGroup>
 </Project>
