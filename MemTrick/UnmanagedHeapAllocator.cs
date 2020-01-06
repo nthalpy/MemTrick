@@ -17,16 +17,6 @@ namespace MemTrick
             return handle;
         }
 
-        private static ConstructorInfo GetConstructorInfo<T>(params Type[] types)
-        {
-            return typeof(T).GetConstructor(
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance,
-                null,
-                CallingConventions.Any,
-                types,
-                null);
-        }
-
         /// <summary>
         /// Similar with FormatterServices.GetUninitializedObject. Allocate and return zeroed T-typed object.
         /// </summary>
@@ -43,6 +33,16 @@ namespace MemTrick
 
             result = TypedReferenceHelper.PointerToObject<Object>(objHeader);
             return new UnmanagedHeapDisposeHandle(objHeader);
+        }
+
+        private static ConstructorInfo GetConstructorInfo<T>(params Type[] types)
+        {
+            return typeof(T).GetConstructor(
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance,
+                null,
+                CallingConventions.Any,
+                types,
+                null);
         }
 
         #region Allocate<T, ...> series
@@ -63,7 +63,7 @@ namespace MemTrick
         /// Similar with new T(arg0);
         /// </summary>
         public static UnmanagedHeapDisposeHandle Allocate<T, TArg0>(
-            out T result, 
+            out T result,
             TArg0 arg0)
             where T : class
         {
