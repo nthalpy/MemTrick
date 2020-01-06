@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ArbitaryMethodInvoker.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ArrayHolder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\CorElementType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ParamTypeDesc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\TypeDesc.cs" />
