@@ -25,8 +25,12 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		MemTrick\MemTrick.projitems*{07afb57e-ff31-4e19-80be-ae0268c3c165}*SharedItemsImports = 4
 		MemTrick.Test\MemTrick.Test.projitems*{275d797b-f396-4305-b1ff-694f884c46c7}*SharedItemsImports = 13
+		MemTrick.Test\MemTrick.Test.projitems*{56941390-d847-4f40-83f4-46ea441dc0e6}*SharedItemsImports = 5
+		MemTrick\MemTrick.projitems*{64b258d6-bf67-4c9e-b590-998c04f92d31}*SharedItemsImports = 5
 		MemTrick\MemTrick.projitems*{710c8077-b9ec-4adc-a925-6540bdb24f6e}*SharedItemsImports = 13
 		MemTrick\MemTrick.projitems*{c0d363b3-55bb-4c6d-9279-621b878fff2b}*SharedItemsImports = 4
+		MemTrick.Test\MemTrick.Test.projitems*{cacf21b5-c8bb-43dc-a771-a2da6fa50985}*SharedItemsImports = 5
+		MemTrick.Test\MemTrick.Test.projitems*{f6799265-85ee-4ca6-ba22-52a1f47c627a}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platform = Debug|Mixed Platform
