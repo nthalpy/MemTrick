@@ -7,10 +7,12 @@ namespace MemTrick
     /// </summary>
     public struct UnmanagedHeapDisposeHandle : IDisposable
     {
+        private int size;
         private IntPtr objHeader;
 
-        internal unsafe UnmanagedHeapDisposeHandle(void* objHeader)
+        internal unsafe UnmanagedHeapDisposeHandle(int size, void* objHeader)
         {
+            this.size = size;
             this.objHeader = (IntPtr)objHeader;
         }
 
@@ -18,7 +20,7 @@ namespace MemTrick
         {
             unsafe
             {
-                RawMemoryAllocator.Free((void*)objHeader);
+                RawMemoryAllocator.Free(size, (void*)objHeader);
             }
         }
     }

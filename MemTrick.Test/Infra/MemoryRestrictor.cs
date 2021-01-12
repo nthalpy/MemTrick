@@ -1,4 +1,5 @@
 ﻿using MemTrick.Hijacking;
+using MemTrick.RumtimeSpecific;
 using MemTrick.Test.Exceptions;
 using System;
 using System.Diagnostics;
@@ -271,21 +272,27 @@ namespace MemTrick.Test.Infra
             IsNoAlloc = false;
         }
 
-        private static Object NewOperatorHook(IntPtr mt)
+        private unsafe static Object NewOperatorHook(IntPtr mt)
         {
             if (IsNoAlloc)
             {
-                try
+                // TODO:
+                // Temporary whitelist. Need some way to allocate AllocationEntry without new operator.
+                // @Harnel
+                if (mt != (IntPtr)MethodTable.GetMethodTable<RawMemoryAllocator.AllocationEntry>())
                 {
-                    IsNoAlloc = false;
-                    Thread curr = Thread.CurrentThread;
+                    try
+                    {
+                        IsNoAlloc = false;
+                        Thread curr = Thread.CurrentThread;
 
-                    throw new MemoryRestrictorException(
-                        $"Tried to allocate in NoAlloc region. Thread: ({curr.Name}, #{curr.ManagedThreadId}), MT: {mt.ToInt64():X}");
-                }
-                finally
-                {
-                    IsNoAlloc = true;
+                        throw new MemoryRestrictorException(
+                            $"Tried to allocate in NoAlloc region. Thread: ({curr.Name}, #{curr.ManagedThreadId}), MT: {mt.ToInt64():X}");
+                    }
+                    finally
+                    {
+                        IsNoAlloc = true;
+                    }
                 }
             }
 

@@ -26,11 +26,11 @@ namespace MemTrick.RumtimeSpecific
             }
             catch
             {
-                RawMemoryAllocator.Free(objHeader);
+                RawMemoryAllocator.Free(pMT->BaseSize, objHeader);
                 throw;
             }
 
-            return new UnmanagedHeapDisposeHandle(objHeader);
+            return new UnmanagedHeapDisposeHandle(pMT->BaseSize, objHeader);
         }
 
         /// <summary>

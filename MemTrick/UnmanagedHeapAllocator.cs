@@ -32,7 +32,7 @@ namespace MemTrick
             RawMemoryAllocator.FillMemory(objHeader + 1, 0, size - sizeof(ObjectHeader));
 
             result = TypedReferenceHelper.PointerToObject<Object>(objHeader);
-            return new UnmanagedHeapDisposeHandle(objHeader);
+            return new UnmanagedHeapDisposeHandle(size, objHeader);
         }
 
         private static ConstructorInfo GetConstructorInfo<T>(params Type[] types)
@@ -162,7 +162,11 @@ namespace MemTrick
             MethodTable* pArrayMT = MethodTable.GetMethodTable<T[]>();
             int elementSize = pElementMT->IsClass ? sizeof(IntPtr) : pElementMT->DataSize;
 
-            void* addr = RawMemoryAllocator.Allocate(sizeof(ObjectHeader) + sizeof(SZArrayHeader) + elementSize * size);
+            int memSize = sizeof(ObjectHeader) + sizeof(SZArrayHeader) + elementSize * size;
+            // TODO: use variable. this is should be expressed thru sizeof(void*).
+            memSize = (memSize + 7) & (~7);
+
+            void* addr = RawMemoryAllocator.Allocate(memSize);
             ObjectHeader* objHeader = (ObjectHeader*)addr;
             SZArrayHeader* szArrayHeader = (SZArrayHeader*)(objHeader + 1);
 
@@ -170,7 +174,7 @@ namespace MemTrick
             szArrayHeader->NumComponents = size;
 
             array = TypedReferenceHelper.PointerToObject<T[]>(objHeader);
-            return new UnmanagedHeapDisposeHandle(objHeader);
+            return new UnmanagedHeapDisposeHandle(memSize, objHeader);
         }
 
         public static UnmanagedHeapDisposeHandle Box<T>(T val, out Object boxed) where T : struct
@@ -187,7 +191,7 @@ namespace MemTrick
             RawMemoryAllocator.MemCpy(objHeader + 1, src, mt->DataSize);
 
             boxed = TypedReferenceHelper.PointerToObject<Object>(objHeader);
-            return new UnmanagedHeapDisposeHandle(objHeader);
+            return new UnmanagedHeapDisposeHandle(size, objHeader);
         }
     }
 }
