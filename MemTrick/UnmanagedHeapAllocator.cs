@@ -163,8 +163,8 @@ namespace MemTrick
             int elementSize = pElementMT->IsClass ? sizeof(IntPtr) : pElementMT->DataSize;
 
             int memSize = sizeof(ObjectHeader) + sizeof(SZArrayHeader) + elementSize * size;
-            // TODO: use variable. this is should be expressed thru sizeof(void*).
-            memSize = (memSize + 7) & (~7);
+            int align = sizeof(IntPtr) - 1;
+            memSize = (memSize + align) & (~align);
 
             void* addr = RawMemoryAllocator.Allocate(memSize);
             ObjectHeader* objHeader = (ObjectHeader*)addr;
