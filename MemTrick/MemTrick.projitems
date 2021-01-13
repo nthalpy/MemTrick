@@ -31,4 +31,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ObjectHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\SZArrayHeader.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)ImplementationMemo\Readme.md" />
+    <None Include="$(MSBuildThisFileDirectory)ImplementationMemo\String-Size.md" />
+  </ItemGroup>
 </Project>
