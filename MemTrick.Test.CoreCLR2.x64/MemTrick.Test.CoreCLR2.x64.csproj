@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>
-      netcoreapp2.0.0;netcoreapp2.0.3;netcoreapp2.0.4;
+      netcoreapp2;netcoreapp2.0.3;netcoreapp2.0.4;
       netcoreapp2.0.5;netcoreapp2.0.6;netcoreapp2.0.7;netcoreapp2.0.9;
 
       netcoreapp2.1.0;netcoreapp2.1.1;netcoreapp2.1.2;netcoreapp2.1.3;netcoreapp2.1.4;

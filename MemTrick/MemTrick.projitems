@@ -9,6 +9,7 @@
     <Import_RootNamespace>MemTrick</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)RawMemory\AllocationEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ArbitaryMethodInvoker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\CorElementType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ParamTypeDesc.cs" />
@@ -25,7 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MemoryCrawler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MemoryLeakException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TypedReferenceHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RawMemoryManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RawMemory\RawMemoryManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\MethodTable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ObjectHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\SZArrayHeader.cs" />

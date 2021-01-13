@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MemTrick.RawMemory;
+using System;
 
 namespace MemTrick.RumtimeSpecific
 {

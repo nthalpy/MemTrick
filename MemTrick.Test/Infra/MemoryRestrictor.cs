@@ -1,4 +1,5 @@
 ﻿using MemTrick.Hijacking;
+using MemTrick.RawMemory;
 using MemTrick.RumtimeSpecific;
 using MemTrick.Test.Exceptions;
 using System;
@@ -279,7 +280,7 @@ namespace MemTrick.Test.Infra
                 // TODO:
                 // Temporary whitelist. Need some way to allocate AllocationEntry without new operator.
                 // @Harnel
-                if (mt != (IntPtr)MethodTable.GetMethodTable<RawMemoryManager.AllocationEntry>())
+                if (mt != (IntPtr)MethodTable.GetMethodTable<AllocationEntry>())
                 {
                     try
                     {

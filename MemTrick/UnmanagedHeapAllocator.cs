@@ -1,4 +1,5 @@
-﻿using MemTrick.RumtimeSpecific;
+﻿using MemTrick.RawMemory;
+using MemTrick.RumtimeSpecific;
 using System;
 using System.Reflection;
 
