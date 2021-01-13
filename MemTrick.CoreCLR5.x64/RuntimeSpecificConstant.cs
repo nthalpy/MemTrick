@@ -1,6 +1,6 @@
 ﻿namespace MemTrick
 {
-    internal static class RuntimeSpecific
+    internal static class RuntimeSpecificConstant
     {
         public const int DacOffset = 0xAC;
     }

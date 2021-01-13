@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
 
 namespace MemTrick
 {
@@ -50,7 +49,7 @@ namespace MemTrick
                 if (matches)
                 {
                     // TODO: Remove RuntimeSpecific.DacOffset magic number.
-                    DacTable = (IntPtr)(p + offset + RuntimeSpecific.DacOffset);
+                    DacTable = (IntPtr)(p + offset + RuntimeSpecificConstant.DacOffset);
                     break;
                 }
             }
