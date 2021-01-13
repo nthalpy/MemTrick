@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 
 namespace MemTrick
 {
@@ -8,11 +9,11 @@ namespace MemTrick
     /// </summary>
     internal unsafe static class MemoryCrawler
     {
-        private static readonly void* BaseAddress;
+        private static readonly IntPtr BaseAddress;
         private static readonly int ModuleMemorySize;
 
         private const String DacTableResourceName = "COREXTERNALDATAACCESSRESOURCE";
-        private static UInt32* DacTable;
+        private static IntPtr DacTable;
 
         static MemoryCrawler()
         {
@@ -20,7 +21,7 @@ namespace MemTrick
             {
                 if (module.ModuleName == "clr.dll" || module.ModuleName == "coreclr.dll")
                 {
-                    BaseAddress = (void*)module.BaseAddress;
+                    BaseAddress = (IntPtr)module.BaseAddress;
                     ModuleMemorySize = module.ModuleMemorySize;
                 }
             }
@@ -49,7 +50,7 @@ namespace MemTrick
                 if (matches)
                 {
                     // TODO: Remove RuntimeSpecific.DacOffset magic number.
-                    DacTable = (UInt32*)(p + offset + RuntimeSpecific.DacOffset);
+                    DacTable = (IntPtr)(p + offset + RuntimeSpecific.DacOffset);
                     break;
                 }
             }
@@ -60,11 +61,11 @@ namespace MemTrick
 
         public static void* RetrieveMethod(DynamicJitHelperEnum e)
         {
-            if (DacTable == null)
+            if (DacTable == IntPtr.Zero)
                 InitializeDac();
 
             // DacTable[8]: clr!hlpDynamicFuncTable
-            void** hlpDynamicFuncTable = (void**)((Byte*)BaseAddress + DacTable[8]);
+            void** hlpDynamicFuncTable = (void**)((Byte*)BaseAddress + ((UInt32*)DacTable)[8]);
             return hlpDynamicFuncTable[(int)e];
         }
     }
