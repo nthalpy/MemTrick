@@ -11,7 +11,7 @@ namespace MemTrick.RumtimeSpecific
             MethodTable* pMT = MethodTable.GetMethodTable<TAction>();
 
             ObjectHeader* pThis = TypedReferenceHelper.ClassToPointer(arg0);
-            ObjectHeader* objHeader = (ObjectHeader*)RawMemoryAllocator.Allocate(pMT->BaseSize);
+            ObjectHeader* objHeader = (ObjectHeader*)RawMemoryManager.Allocate(pMT->BaseSize);
 
             try
             {
@@ -26,7 +26,7 @@ namespace MemTrick.RumtimeSpecific
             }
             catch
             {
-                RawMemoryAllocator.Free(pMT->BaseSize, objHeader);
+                RawMemoryManager.Free(pMT->BaseSize, objHeader);
                 throw;
             }
 

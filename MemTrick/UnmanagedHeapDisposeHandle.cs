@@ -20,7 +20,7 @@ namespace MemTrick
         {
             unsafe
             {
-                RawMemoryAllocator.Free(size, (void*)objHeader);
+                RawMemoryManager.Free(size, (void*)objHeader);
             }
         }
     }

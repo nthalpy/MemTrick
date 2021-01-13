@@ -100,7 +100,7 @@ namespace MemTrick.Test.Infra
                 pSrc[10] == 0x03 && pSrc[11] == 0x42 && pSrc[12] == 0x40 &&
                 pSrc[13] == 0x3B && pSrc[14] == 0x42 && pSrc[15] == 0x44)
             {
-                RawMemoryAllocator.MemCpy(pDst, pSrc, 16);
+                RawMemoryManager.MemCpy(pDst, pSrc, 16);
                 return new MigrationResult(16, 16);
             }
             // Works on... 
@@ -111,7 +111,7 @@ namespace MemTrick.Test.Infra
                 pSrc[3] == 0x65 && pSrc[4] == 0x4C && pSrc[5] == 0x8B && pSrc[6] == 0x1C && pSrc[7] == 0x25 &&
                 pSrc[12] == 0x4D && pSrc[13] == 0x8B && pSrc[14] == 0x53)
             {
-                RawMemoryAllocator.MemCpy(pDst, pSrc, 16);
+                RawMemoryManager.MemCpy(pDst, pSrc, 16);
                 return new MigrationResult(16, 16);
             }
             // Works on...
@@ -125,7 +125,7 @@ namespace MemTrick.Test.Infra
                 int dstOffset = 0;
 
                 // mov edx, dword ptr [rcx+4]
-                RawMemoryAllocator.MemCpy(pDst, pSrc, 3);
+                RawMemoryManager.MemCpy(pDst, pSrc, 3);
                 srcOffset += 3;
                 dstOffset += 3;
 
@@ -144,7 +144,7 @@ namespace MemTrick.Test.Infra
                 dstOffset += 13;
 
                 // mov rax, qword ptr gs:[58h]
-                RawMemoryAllocator.MemCpy(pDst + dstOffset, pSrc + srcOffset, 9);
+                RawMemoryManager.MemCpy(pDst + dstOffset, pSrc + srcOffset, 9);
                 srcOffset += 9;
                 dstOffset += 9;
 
@@ -181,7 +181,7 @@ namespace MemTrick.Test.Infra
                 srcOffset += 7;
                 dstOffset += 13;
 
-                RawMemoryAllocator.MemCpy(pDst + dstOffset, pSrc + srcOffset, 6);
+                RawMemoryManager.MemCpy(pDst + dstOffset, pSrc + srcOffset, 6);
                 srcOffset += 6;
                 dstOffset += 6;
 
@@ -195,7 +195,7 @@ namespace MemTrick.Test.Infra
                 pSrc[3] == 0x8B && pSrc[4] == 0x0D &&
                 pSrc[9] == 0x81 && pSrc[10] == 0xF8)
             {
-                RawMemoryAllocator.MemCpy(pDst, pSrc, 15);
+                RawMemoryManager.MemCpy(pDst, pSrc, 15);
                 return new MigrationResult(15, 15);
             }
             else
@@ -223,7 +223,7 @@ namespace MemTrick.Test.Infra
 
                 // copy mov rax, qword ptr [rcx+20h]
                 // copy test dword ptr [rax], 4
-                RawMemoryAllocator.MemCpy(pDst, pSrc, 10);
+                RawMemoryManager.MemCpy(pDst, pSrc, 10);
                 srcOffset += 10;
                 dstOffset += 10;
 
@@ -244,7 +244,7 @@ namespace MemTrick.Test.Infra
                 srcOffset += 2;
                 dstOffset += 14;
 
-                RawMemoryAllocator.MemCpy(pDst + dstOffset, pSrc + srcOffset, 4);
+                RawMemoryManager.MemCpy(pDst + dstOffset, pSrc + srcOffset, 4);
                 srcOffset += 4;
                 dstOffset += 4;
                 return new MigrationResult(srcOffset, dstOffset);
@@ -279,7 +279,7 @@ namespace MemTrick.Test.Infra
                 // TODO:
                 // Temporary whitelist. Need some way to allocate AllocationEntry without new operator.
                 // @Harnel
-                if (mt != (IntPtr)MethodTable.GetMethodTable<RawMemoryAllocator.AllocationEntry>())
+                if (mt != (IntPtr)MethodTable.GetMethodTable<RawMemoryManager.AllocationEntry>())
                 {
                     try
                     {

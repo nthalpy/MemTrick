@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace MemTrick
 {
-    internal unsafe static class RawMemoryAllocator
+    internal unsafe static class RawMemoryManager
     {
         // IMPORTANT:
         // Allocating class instances to arbitrary memory can 
@@ -32,18 +32,13 @@ namespace MemTrick
             private int head;
             private int tail;
 
-            private int maxIndex
-            {
-                get
-                {
-                    return EntrySize / elementSize;
-                }
-            }
+            private readonly int maxIndex;
 
             public AllocationEntry(int elementSize)
             {
                 this.elementSize = elementSize;
                 head = 0;
+                maxIndex = EntrySize / elementSize;
                 tail = maxIndex;
 
                 // heap variable will be allocated in LOH,
@@ -104,7 +99,7 @@ namespace MemTrick
 
         private static readonly Dictionary<int, AllocationEntry> byteArrayList;
 
-        static RawMemoryAllocator()
+        static RawMemoryManager()
         {
             byteArrayList = new Dictionary<int, AllocationEntry>();
         }
