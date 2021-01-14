@@ -9,6 +9,8 @@
     <Import_RootNamespace>MemTrick</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AllocationFreeObject\AllocationFreeList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AllocationFreeObject\ICollectionDebugView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RawMemory\AllocationEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ArbitaryMethodInvoker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\CorElementType.cs" />

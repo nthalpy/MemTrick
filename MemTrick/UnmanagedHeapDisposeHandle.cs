@@ -8,20 +8,20 @@ namespace MemTrick
     /// </summary>
     public struct UnmanagedHeapDisposeHandle : IDisposable
     {
+        public readonly IntPtr ObjHeader;
         private int size;
-        private IntPtr objHeader;
 
         internal unsafe UnmanagedHeapDisposeHandle(int size, void* objHeader)
         {
             this.size = size;
-            this.objHeader = (IntPtr)objHeader;
+            this.ObjHeader = (IntPtr)objHeader;
         }
 
         public void Dispose()
         {
             unsafe
             {
-                RawMemoryManager.Free(size, (void*)objHeader);
+                RawMemoryManager.Free(size, (void*)ObjHeader);
             }
         }
     }

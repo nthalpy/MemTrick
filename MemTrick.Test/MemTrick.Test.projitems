@@ -9,6 +9,7 @@
     <Import_RootNamespace>MemTrick.Test</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AllocationFreeListTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AllocatorTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BoxingTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MemoryRestrictorException.cs" />
