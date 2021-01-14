@@ -2,9 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>
-      netcoreapp5;
-
-      
+      netcoreapp5.0;
     </TargetFrameworks>
 
     <IsPackable>false</IsPackable>

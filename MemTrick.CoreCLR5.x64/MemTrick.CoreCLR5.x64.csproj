@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp5</TargetFramework>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
