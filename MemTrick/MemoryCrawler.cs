@@ -25,7 +25,7 @@ namespace MemTrick
                 }
             }
 
-            if (BaseAddress == null)
+            if (BaseAddress == IntPtr.Zero)
                 throw new Exception("Unable to find proper runtime module (clr/coreclr).");
         }
 
@@ -54,7 +54,7 @@ namespace MemTrick
                 }
             }
 
-            if (DacTable == null)
+            if (DacTable == IntPtr.Zero)
                 throw new NotSupportedException("Unable to find DAC Table!");
         }
 
