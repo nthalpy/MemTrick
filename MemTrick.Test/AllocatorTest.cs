@@ -58,6 +58,8 @@ namespace MemTrick.Test
         // TODO: Fix this to make no memory allocations.
         public void PublicConstructorCallTest()
         {
+            UnmanagedHeapAllocator.PreCacheConstructor<DummyClass>();
+
             //using (MemoryRestrictor.StartNoAlloc())
             using (UnmanagedHeapAllocator.Allocate(out DummyClass uheapObj))
             {

@@ -1,6 +1,7 @@
 ﻿using MemTrick.RawMemory;
 using MemTrick.RumtimeSpecific;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace MemTrick
@@ -46,6 +47,19 @@ namespace MemTrick
                 null);
         }
 
+
+        private static Dictionary<Type, IntPtr> cache = new Dictionary<Type, IntPtr>();
+
+        public static void PreCacheConstructor<T>()
+        {
+            ConstructorInfo ci = GetConstructorInfo<T>(Type.EmptyTypes);
+            cache.Add(typeof(T), ci.MethodHandle.GetFunctionPointer());
+        }
+        private static IntPtr GetConstructorLocation<T>()
+        {
+            return cache[typeof(T)];
+        }
+
         #region Allocate<T, ...> series
         /// <summary>
         /// Similar with new T();
@@ -54,8 +68,7 @@ namespace MemTrick
         {
             UnmanagedHeapDisposeHandle handle = UninitializedAllocation<T>(out result);
 
-            ConstructorInfo ci = GetConstructorInfo<T>(Type.EmptyTypes);
-            ArbitaryMethodInvoker.InvokeAction(ci.MethodHandle.GetFunctionPointer(), result);
+            ArbitaryMethodInvoker.InvokeAction(GetConstructorLocation<T>(), result);
 
             return handle;
         }

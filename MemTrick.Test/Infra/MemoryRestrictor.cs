@@ -3,7 +3,6 @@ using MemTrick.RawMemory;
 using MemTrick.RumtimeSpecific;
 using MemTrick.Test.Exceptions;
 using System;
-using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 
