@@ -13,7 +13,7 @@ namespace MemTrick.AllocationFreeObject
     /// Sync w/ src/libraries/System.Private.CoreLib/src/System/Collections/Generic/List.cs
     /// @Harnel
     /// </summary>
-    [DebuggerTypeProxy(typeof(ICollectionDebugView<>))]
+    //[DebuggerTypeProxy(typeof(ICollectionDebugView<>))]
     [DebuggerDisplay("Count = {Count}")]
     [Serializable]
     public class AllocationFreeList<T> : /*IList<T>, IList, IReadOnlyList<T>,*/ IDisposable
@@ -39,22 +39,36 @@ namespace MemTrick.AllocationFreeObject
         private Nullable<UnmanagedHeapDisposeHandle> arrayHandle;
 
         // Synced w/ list._items
-        private readonly IntPtr pItems;
+        private readonly IntPtr ppItems;
         private unsafe T[] items
         {
             get
             {
-                return TypedReferenceHelper.PointerToObject<T[]>((ObjectHeader*)pItems);
+                IntPtr pItems = *(IntPtr*)ppItems;
+                if (pItems == IntPtr.Zero)
+                    return null;
+
+                IntPtr ppMT = pItems;
+                IntPtr pSyncBlock = ppMT - sizeof(IntPtr);
+
+                return TypedReferenceHelper.PointerToObject<T[]>((ObjectHeader*)pSyncBlock);
             }
             set
             {
-                IntPtr oldPtr = *(IntPtr*)pItems;
-                IntPtr newPtr = (IntPtr)(&TypedReferenceHelper.ClassToPointer(value)->MethodTable);
+                *(IntPtr*)ppItems = (IntPtr)(&TypedReferenceHelper.ClassToPointer(value)->MethodTable);
+            }
+        }
 
-                if (newPtr == oldPtr)
-                    return;
-
-                *(IntPtr*)pItems = newPtr;
+        private readonly IntPtr pSize;
+        private unsafe int size
+        {
+            get
+            {
+                return *(int*)pSize;
+            }
+            set
+            {
+                *(int*)pSize = value;
             }
         }
 
@@ -78,8 +92,9 @@ namespace MemTrick.AllocationFreeObject
             {
                 listHandle = UnmanagedHeapAllocator.UninitializedAllocation(out list);
 
-                pItems = (IntPtr)((Byte*)listHandle.ObjHeader + sizeof(ObjectHeader));
-                pVersion = (IntPtr)((Byte*)listHandle.ObjHeader + sizeof(ObjectHeader) + sizeof(IntPtr) + sizeof(int));
+                ppItems = (IntPtr)((Byte*)listHandle.ObjHeader + sizeof(ObjectHeader));
+                pSize = ppItems + sizeof(IntPtr);
+                pVersion = pSize + sizeof(Int32);
             }
 
             items = EmptyArray;
@@ -113,7 +128,7 @@ namespace MemTrick.AllocationFreeObject
                 if (newCapacity < min)
                     newCapacity = min;
 
-                Capacity = newCapacity;
+                this.Capacity = newCapacity;
             }
         }
 
