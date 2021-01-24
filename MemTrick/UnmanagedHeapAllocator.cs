@@ -6,6 +6,11 @@ using System.Reflection;
 
 namespace MemTrick
 {
+    // MEMO:
+    // In some environment, GC may mark the method tables to pMT|1,
+    // and may not recover this because these objects will not be sweeped.
+    // Need to track down and handle these cases.
+    // @Harnel
     public static unsafe class UnmanagedHeapAllocator
     {
         /// <summary>
