@@ -14,7 +14,7 @@ namespace MemTrick.Test
             {
                 int val = 12345678;
 
-                using (UnmanagedHeapAllocator.Box(val, out Object boxed))
+                using (ClassAllocator.Box(val, out Object boxed))
                 {
                     MemoryRestrictor.EndNoAlloc();
                     Assert.AreEqual(val, boxed);

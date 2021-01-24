@@ -5,7 +5,7 @@ namespace MemTrick.RumtimeSpecific
 {
     internal static unsafe class ArbitaryMethodInvoker
     {
-        private static UnmanagedHeapDisposeHandle CreateAction<TAction, TArg0>(TArg0 arg0, IntPtr pMethod, out TAction action)
+        private static ClassDisposeHandle CreateAction<TAction, TArg0>(TArg0 arg0, IntPtr pMethod, out TAction action)
             where TAction : Delegate
             where TArg0 : class
         {
@@ -31,7 +31,7 @@ namespace MemTrick.RumtimeSpecific
                 throw;
             }
 
-            return new UnmanagedHeapDisposeHandle(pMT->BaseSize, objHeader);
+            return new ClassDisposeHandle(pMT->BaseSize, objHeader);
         }
 
         /// <summary>

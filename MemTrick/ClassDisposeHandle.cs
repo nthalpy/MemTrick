@@ -4,14 +4,14 @@ using System;
 namespace MemTrick
 {
     /// <summary>
-    /// Handle for disposing unmanaged heap memory. Use with using clause.
+    /// Handle for disposing memory. Use with using clause.
     /// </summary>
-    public struct UnmanagedHeapDisposeHandle : IDisposable
+    public struct ClassDisposeHandle : IDisposable
     {
         public readonly IntPtr ObjHeader;
         private int size;
 
-        internal unsafe UnmanagedHeapDisposeHandle(int size, void* objHeader)
+        internal unsafe ClassDisposeHandle(int size, void* objHeader)
         {
             this.size = size;
             this.ObjHeader = (IntPtr)objHeader;

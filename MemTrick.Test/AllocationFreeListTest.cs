@@ -15,9 +15,9 @@ namespace MemTrick.Test
 
             Random rd = new Random();
             List<int> list1 = new List<int>(maxCapacity);
-            UnmanagedHeapAllocator.PreCacheConstructor<AllocationFreeList<int>>();
+            ClassAllocator.PreCacheConstructor<AllocationFreeList<int>>();
 
-            using (UnmanagedHeapAllocator.Allocate(out AllocationFreeList<int> list2))
+            using (ClassAllocator.Allocate(out AllocationFreeList<int> list2))
             {
                 for (int iter = 0; iter < 100000; iter++)
                 {

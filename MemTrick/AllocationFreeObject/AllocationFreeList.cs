@@ -23,7 +23,7 @@ namespace MemTrick.AllocationFreeObject
         static AllocationFreeList()
         {
             // Note: emptyArray will not be free in any case.
-            UnmanagedHeapAllocator.AllocateSZArray<T>(0, out EmptyArray);
+            ClassAllocator.AllocateSZArray<T>(0, out EmptyArray);
         }
 
         /// <summary>
@@ -32,11 +32,11 @@ namespace MemTrick.AllocationFreeObject
         /// therefore we can just focus on methods which reallocate _items.
         /// </summary>
         private readonly List<T> list;
-        private readonly UnmanagedHeapDisposeHandle listHandle;
+        private readonly ClassDisposeHandle listHandle;
 
         // Note:
         // arrayHandle is null when array is AllocationFreeList`1.EmptyArray.
-        private Nullable<UnmanagedHeapDisposeHandle> arrayHandle;
+        private Nullable<ClassDisposeHandle> arrayHandle;
 
         // Synced w/ list._items
         private readonly IntPtr ppItems;
@@ -90,7 +90,7 @@ namespace MemTrick.AllocationFreeObject
         {
             unsafe
             {
-                listHandle = UnmanagedHeapAllocator.UninitializedAllocation(out list);
+                listHandle = ClassAllocator.UninitializedAllocation(out list);
 
                 ppItems = (IntPtr)((Byte*)listHandle.ObjHeader + sizeof(ObjectHeader));
                 pSize = ppItems + sizeof(IntPtr);
@@ -106,7 +106,7 @@ namespace MemTrick.AllocationFreeObject
                 items = EmptyArray;
             else
             {
-                arrayHandle = UnmanagedHeapAllocator.AllocateSZArray(capacity, out T[] temp);
+                arrayHandle = ClassAllocator.AllocateSZArray(capacity, out T[] temp);
                 items = temp;
             }
         }
@@ -151,7 +151,7 @@ namespace MemTrick.AllocationFreeObject
                 {
                     if (value > 0)
                     {
-                        UnmanagedHeapDisposeHandle newHandle = UnmanagedHeapAllocator.AllocateSZArray(value, out T[] newItems);
+                        ClassDisposeHandle newHandle = ClassAllocator.AllocateSZArray(value, out T[] newItems);
                         if (list.Count > 0)
                         {
                             Array.Copy(items, newItems, list.Count);

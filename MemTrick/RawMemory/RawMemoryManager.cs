@@ -12,11 +12,11 @@ namespace MemTrick.RawMemory
         //
         // Therefore, this code allocates inside the LOH instance.
         // @Harnel
-        private static readonly Dictionary<int, AllocationEntry> byteArrayList;
+        private static readonly Dictionary<int, AllocationEntry> entries;
 
         static RawMemoryManager()
         {
-            byteArrayList = new Dictionary<int, AllocationEntry>();
+            entries = new Dictionary<int, AllocationEntry>();
         }
 
         [Conditional("DEBUG")]
@@ -51,10 +51,10 @@ namespace MemTrick.RawMemory
 
         public static void* Allocate(int size)
         {
-            if (byteArrayList.ContainsKey(size) == false)
-                byteArrayList[size] = new AllocationEntry(size);
+            if (entries.ContainsKey(size) == false)
+                entries[size] = new AllocationEntry(size);
 
-            return byteArrayList[size].GetSlotAndAdvance();
+            return entries[size].GetSlotAndAdvance();
         }
 
         public static void* Reallocate(void* prev, int size)
@@ -64,7 +64,7 @@ namespace MemTrick.RawMemory
 
         public static void Free(int size, void* ptr)
         {
-            byteArrayList[size].Free(ptr);
+            entries[size].Free(ptr);
         }
     }
 }

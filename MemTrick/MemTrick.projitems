@@ -11,14 +11,14 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AllocationFreeObject\AllocationFreeList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AllocationFreeObject\ICollectionDebugView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ClassAllocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RawMemory\AllocationEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ArbitaryMethodInvoker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\CorElementType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ParamTypeDesc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\TypeDesc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\TypeHandle.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UnmanagedHeapAllocator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UnmanagedHeapDisposeHandle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ClassDisposeHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DynamicJitHelperEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hijacking\HijackContextBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hijacking\HijackFuncContext.cs" />

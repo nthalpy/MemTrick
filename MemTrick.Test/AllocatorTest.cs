@@ -44,7 +44,7 @@ namespace MemTrick.Test
 
             using (MemoryRestrictor.StartNoAlloc())
             {
-                using (UnmanagedHeapAllocator.UninitializedAllocation(out DummyClass uheapObj))
+                using (ClassAllocator.UninitializedAllocation(out DummyClass uheapObj))
                 {
                     MemoryRestrictor.EndNoAlloc();
 
@@ -58,10 +58,10 @@ namespace MemTrick.Test
         // TODO: Fix this to make no memory allocations.
         public void PublicConstructorCallTest()
         {
-            UnmanagedHeapAllocator.PreCacheConstructor<DummyClass>();
+            ClassAllocator.PreCacheConstructor<DummyClass>();
 
             //using (MemoryRestrictor.StartNoAlloc())
-            using (UnmanagedHeapAllocator.Allocate(out DummyClass uheapObj))
+            using (ClassAllocator.Allocate(out DummyClass uheapObj))
             {
                 //MemoryRestrictor.EndNoAlloc();
 
@@ -76,7 +76,7 @@ namespace MemTrick.Test
             const int expectedIntFieldValue = 0x34;
 
             //using (MemoryRestrictor.StartNoAlloc())
-            using (UnmanagedHeapAllocator.Allocate(out DummyClass uheapObj, expectedIntFieldValue))
+            using (ClassAllocator.Allocate(out DummyClass uheapObj, expectedIntFieldValue))
             {
                 //MemoryRestrictor.EndNoAlloc();
 
