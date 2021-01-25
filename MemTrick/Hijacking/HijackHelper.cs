@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Iced.Intel;
+using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -16,10 +17,15 @@ namespace MemTrick.Hijacking
 
             Byte* pTargetMethod = (Byte*)target.MethodHandle.GetFunctionPointer();
 
-            if (pTargetMethod[0] == 0xE9)
+            // TODO: make allocation free way to allocate decoder.
+            Decoder d = Decoder.Create(64, new BytePtrCodeReader(pTargetMethod));
+
+            Instruction inst = d.Decode();
+            switch (inst.Code)
             {
-                Int32 rel32 = *(Int32*)(pTargetMethod + 1);
-                pTargetMethod += rel32 + 5;
+                case Code.Jmp_rel32_64:
+                    pTargetMethod += inst.Immediate32to64;
+                    break;
             }
 
             HijackUnmanagedMethod(pTargetMethod, hook, context);
@@ -44,7 +50,7 @@ namespace MemTrick.Hijacking
             Kernel32.VirtualProtectEx(
                 Process.GetCurrentProcess().Handle, (IntPtr)target, (UIntPtr)result.SrcOffset,
                 Kernel32.PageProtection.ExecuteReadWrite, out Kernel32.PageProtection originalProtection);
-            
+
             ((Byte*)context.Buffer)[result.DstOffset] = 0x50; // push rax
             InsertJump(context.Buffer + result.DstOffset + 1, (Byte*)target + result.SrcOffset - 1);
 

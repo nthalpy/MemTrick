@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AllocationFreeObject\AllocationFreeList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AllocationFreeObject\ICollectionDebugView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BytePtrCodeReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ClassAllocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RawMemory\AllocationEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RumtimeSpecific\ArbitaryMethodInvoker.cs" />
