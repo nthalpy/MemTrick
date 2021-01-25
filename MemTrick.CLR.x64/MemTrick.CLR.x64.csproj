@@ -48,7 +48,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuntimeSpecificConstant.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\iced\src\csharp\Intel\Iced\Iced.csproj">
+      <Project>{b24cc821-1019-4730-840d-8304ab1cfd0f}</Project>
+      <Name>Iced</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\MemTrick\MemTrick.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -41,4 +41,8 @@
 
   <Import Project="..\MemTrick\MemTrick.projitems" Label="Shared" />
 
+  <ItemGroup>
+    <ProjectReference Include="..\iced\src\csharp\Intel\Iced\Iced.csproj" />
+  </ItemGroup>
+
 </Project>
